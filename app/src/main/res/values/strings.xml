@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DirectoryApp</string>
+    <string name="tv1">DIRECTORIO DE USUARIOS</string>
+    <string name="Eliminar1">Estás seguro de eliminar del directorio?</string>
+    <string name="Eliminarb">Eliminar</string>
+    <string name="Cancelar">Cancelar</string>
+</resources>
