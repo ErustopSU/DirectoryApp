@@ -4,16 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private static Adapter adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -41,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false);
-
+                getUsersSQLite();
                 getUsers();
             }
         });
@@ -70,7 +67,17 @@ public class MainActivity extends AppCompatActivity {
         getUsers();
     }
 
-    public static Object getUsers() {
+    public void getUsersSQLite(){
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(MainActivity.this);
+
+        Cursor cursor = adminSQLiteOpenHelper.consultUser();
+
+        cursor.;
+
+
+    }
+    //metodo getUsers con Retrofit
+    public static void getUsers() {
         //Crear conexion al API
         Retrofit retrofit = RetrofitClient.getRetrofitClient();
 
@@ -110,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Error: " +  t.getMessage());
             }
         });
-        return null;
     }
 
     //Configurar RecyclerView

@@ -119,6 +119,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
         Call<User> getUser = retrofit.create(UsersInterface.class).getUser(id);
 
+
+
         getUser.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -138,10 +140,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                     }
 
                 } else {
-
-                    AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
-
-                    adminSQLiteOpenHelper.consultUserBy_id(id);
 
                     User user = response.body();
 
