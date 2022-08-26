@@ -4,13 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,10 +42,14 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(false);
-                getUsersSQLite();
-                getUsers();
-            }
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    getUsersSQLite();
+                    getUsers();
+
+                }
+
         });
 
         setRecyclerView();
@@ -58,24 +67,31 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     @Override
     protected void onResume() {
-        super.onResume();
+        if (UtilsNetwork.isOnline(this)) {
+            getUsers();
+            super.onResume();
 
-        getUsers();
+            Toast.makeText(this, "Tienes internet", Toast.LENGTH_LONG).show();
+        } else {
+            getUsersSQLite();
+            super.onResume();
+
+            Toast.makeText(MainActivity.this, "Sin internet", Toast.LENGTH_LONG).show();
+        }
     }
 
-    public void getUsersSQLite(){
+
+    public void getUsersSQLite() {
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(MainActivity.this);
 
         Cursor cursor = adminSQLiteOpenHelper.consultUser();
-
-        cursor.;
-
-
     }
+
     //metodo getUsers con Retrofit
     public static void getUsers() {
         //Crear conexion al API
@@ -101,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                             System.out.println("404");
                             break;
                         default:
-                            System.out.println("Error: " +  response.code());
+                            System.out.println("Error: " + response.code());
                     }
 
                     //Si la respuesta es satisfactoria
@@ -114,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             //En el caso de que la peticion falle
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                System.out.println("Error: " +  t.getMessage());
+                System.out.println("Error: " + t.getMessage());
             }
         });
     }

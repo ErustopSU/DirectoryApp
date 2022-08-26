@@ -116,7 +116,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
             values.put(COL_2, email);
             values.put(COL_3, code);
 
-            int user = BaseDeDatos.update(TUSUARIOS, values, null, null);
+            int user = BaseDeDatos.update(TUSUARIOS, values, COL_0 + " = '" + _id + "'", null);
 
             closeDatabase(BaseDeDatos);
             return user;
