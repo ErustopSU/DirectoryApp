@@ -99,24 +99,26 @@ public class MainActivity2 extends AppCompatActivity {
                     public void onClick(View view) {
                         final String compruebaname = et1.getEditText().getText().toString();
                         final String compruebaemail = et2.getEditText().getText().toString().trim();
-                        final String regex = "(?:[^<>()\\[\\].,;:\\s@\"]+(?:\\.[^<>()\\[\\].,;:\\s@\"]+)*|\"[^\\n\"]+\")@(?:[^<>()\\[\\].,;:\\s@\"]+\\.)+[^<>()\\[\\]\\.,;:\\s@\"]{2,63}";
+                        final String regex = "(?:[^<>()\\[\\].,;:\\s@\"]+(?:\\.[^<>()\\[\\].,;:\\s@" +
+                                "\"]+)*|\"[^\\n\"]+\")@(?:[^<>()\\[\\].,;:\\s@\"]+\\.)+[^<>()\\[\\]" +
+                                "\\.,;:\\s@\"]{2,63}";
                         final String solotexto = "[a-zA-Z ]+";
 
-                        if (et1.getEditText().getText().toString().isEmpty() || et2.getEditText().getText().toString().isEmpty() || et3.getEditText().getText().toString().isEmpty()) {
+                        if (et1.getEditText().getText().toString().isEmpty() ||
+                                et2.getEditText().getText().toString().isEmpty() ||
+                                et3.getEditText().getText().toString().isEmpty()) {
                             Toast.makeText(MainActivity2.this, "Debes llenar todos los campos", Toast.LENGTH_SHORT).show();
-                        } else if ((!compruebaname.matches(solotexto))) {
+                        } else if
+                        ((!compruebaname.matches(solotexto))) {
                             Toast.makeText(MainActivity2.this, "Asegurate de ingresar solo texto en el campo de nombre", Toast.LENGTH_SHORT).show();
-                        } else if (et3.getEditText().getText().length() > 5) {
+                        } else if (et3.getEditText()
+                                .getText().length() > 5) {
                             Toast.makeText(MainActivity2.this, "El codigo es mayor a 5 digitos", Toast.LENGTH_SHORT).show();
-                        } else if ((!compruebaemail.matches(regex))) {
+                        } else if ((!compruebaemail.matches
+                                (regex))) {
                             Toast.makeText(MainActivity2.this, "Por favor, introduce un correo valido", Toast.LENGTH_LONG).show();
                         } else {
                             createUser(retrieveUser());
-
-                            // ponemos los campos a vacío para insertar el siguiente usuario
-                            //et1.getEditText().setText("");
-                            //et2.getEditText().setText("");
-                            //et3.getEditText().setText("");
 
                         }
                     }
@@ -218,6 +220,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     //Update user by id Retrofit
     private void updateUser(String fullname, String email, int code, String id) {
+
 
         Retrofit retrofit = RetrofitClient.getRetrofitClient();
 

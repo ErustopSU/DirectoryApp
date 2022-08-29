@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             getUsersSQLite();
             super.onResume();
 
-            Toast.makeText(MainActivity.this, "Sin internet", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Cargando datos sin internet", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -96,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
         List<User> usersSQLite = new ArrayList<>();
         User user;
 
-
         System.out.println("User size: " + cursor.getCount());
+
 
         if (cursor.moveToFirst()) {
 

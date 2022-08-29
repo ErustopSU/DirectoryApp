@@ -109,10 +109,14 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase BaseDeDatos = this.getWritableDatabase();
 
+        //probando condicion para crear un registro si no existe en SQLite
+        if (!COL_0.matches(_id)) {
+            registerUser(_id, fullname, email, code);  //Metodo que Enyer inventó y le funcionó :'D
+        }
+
         try {
             ContentValues values = new ContentValues();
 
-            values.put(COL_0, _id);
             values.put(COL_1, fullname);
             values.put(COL_2, email);
             values.put(COL_3, code);
@@ -133,6 +137,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
     //Check if user is already registered
     public Cursor consultUser() throws SQLException {
         SQLiteDatabase BaseDeDatos = this.getReadableDatabase();
+        
 
         try {
             Cursor user = BaseDeDatos.rawQuery("SELECT * FROM " + TUSUARIOS, null);
