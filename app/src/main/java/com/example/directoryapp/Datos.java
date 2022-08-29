@@ -1,7 +1,10 @@
 package com.example.directoryapp;
 
 public class Datos {
-    private String id, fullname, email, code;
+    private String id;
+    private String fullname;
+    private String email;
+    private String code;
 
     //Constructor
     public Datos(String id, String fullname, String email, String code) {

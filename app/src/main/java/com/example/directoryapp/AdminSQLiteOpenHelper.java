@@ -1,4 +1,5 @@
 package com.example.directoryapp;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -6,20 +7,22 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
+import java.util.ArrayList;
+
+public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final int DB_VERSION = 2;
     private static final String DB_NAME = "BASE DE DATOS";
 
-    private static final String TUSUARIOS = "TUSUARIOS";
+    public static final String TUSUARIOS = "TUSUARIOS";
     private static final String COL_0 = "ID";
     private static final String COL_1 = "FULLNAME";
     private static final String COL_2 = "EMAIL";
     private static final String COL_3 = "CODE";
-
 
 
     //Constructor
@@ -43,7 +46,6 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         );
 
 
-
     }
 
 
@@ -62,7 +64,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
             @NonNull String email,
             @NonNull String code
 
-            ) throws SQLException {
+    ) throws SQLException {
         SQLiteDatabase BaseDeDatos = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -76,14 +78,13 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
             long result = BaseDeDatos.insert(TUSUARIOS, null, values);
 
             closeDatabase(BaseDeDatos);
-        return result != -1;
+            return result != -1;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
 
     }
-
 
 
     //Close database
@@ -151,30 +152,6 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         return null;
     }
 
-    //Consult user by uid
-    public Cursor consultUserBy_id(@NonNull String _id) throws SQLException {
-        SQLiteDatabase BaseDeDatos = this.getReadableDatabase();
-
-        try {
-
-            Cursor user = BaseDeDatos.rawQuery("SELECT * FROM " + TUSUARIOS + " WHERE " + COL_0 + " = '" + _id + "'", null);
-
-            if (user.moveToFirst()) {
-                closeDatabase(BaseDeDatos);
-                return user;
-            } else {
-                closeDatabase(BaseDeDatos);
-                return null;
-            }
-
-        } catch (SQLException e) {
-            closeDatabase(BaseDeDatos);
-            e.printStackTrace();
-        }
-
-        closeDatabase(BaseDeDatos);
-        return null;
-    }
 
 }
 

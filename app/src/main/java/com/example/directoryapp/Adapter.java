@@ -61,7 +61,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
             holder.fullname.setText("Nombre: " + datas.getFullname());
             holder.email.setText("Correo: " + datas.getEmail());
-            holder.code.setText("Código: " + String.valueOf(datas.getCode()));
+            holder.code.setText("Código: " + datas.getCode());
 
             //Se Asignan funciones de acción al cardview
             holder.itemView.setOnClickListener(new View.OnClickListener() {

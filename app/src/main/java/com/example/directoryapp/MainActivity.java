@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     private static Adapter adapter;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +43,16 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
-                    swipeRefreshLayout.setRefreshing(false);
-
-                    getUsersSQLite();
+                swipeRefreshLayout.setRefreshing(false);
+                if (UtilsNetwork.isOnline(MainActivity.this)) {
                     getUsers();
 
+                } else {
+                    Toast.makeText(MainActivity.this, "Cargando datos sin internet", Toast.LENGTH_LONG).show();
+                    getUsersSQLite();
+
                 }
+            }
 
         });
 
@@ -76,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
             getUsers();
             super.onResume();
 
-            Toast.makeText(this, "Tienes internet", Toast.LENGTH_LONG).show();
         } else {
             getUsersSQLite();
             super.onResume();
@@ -85,11 +88,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    //metodo getUsers con SQLite
     public void getUsersSQLite() {
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(MainActivity.this);
 
         Cursor cursor = adminSQLiteOpenHelper.consultUser();
+        List<User> usersSQLite = new ArrayList<>();
+        User user;
+
+
+        System.out.println("User size: " + cursor.getCount());
+
+        if (cursor.moveToFirst()) {
+
+            do {
+                user = new User();
+                user.setId(String.valueOf(cursor.getInt(0)));
+                user.setFullname(cursor.getString(1));
+                user.setEmail(cursor.getString(2));
+                user.setCode(Integer.parseInt(cursor.getString(3)));
+                usersSQLite.add(user);
+
+                populateUsers(usersSQLite);
+
+                System.out.println(cursor.getString(1));
+                System.out.println(user);
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return;
     }
 
     //metodo getUsers con Retrofit
@@ -149,9 +177,10 @@ public class MainActivity extends AppCompatActivity {
         List<Datos> data = new ArrayList<>();
 
         for (User user : usersList) {
+
             data.add(new Datos(user.getId(), user.getFullname(), user.getEmail(), String.valueOf(user.getCode())));
         }
         adapter.update(data);
-    }
 
+    }
 }
