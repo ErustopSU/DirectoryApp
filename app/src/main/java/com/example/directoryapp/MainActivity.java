@@ -63,12 +63,18 @@ public class MainActivity extends AppCompatActivity {
         boton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (UtilsNetwork.isOnline(MainActivity.this)) {
+                    Intent intent = new Intent(MainActivity.this, MainActivity2.class);
 
-                Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+                    intent.putExtra("method", "CREATE");
 
-                intent.putExtra("method", "CREATE");
+                    startActivity(intent);
 
-                startActivity(intent);
+                } else {
+
+                    Toast.makeText(MainActivity.this, "Necesitas internet para crear una tarjeta.", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 

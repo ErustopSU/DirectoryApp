@@ -23,7 +23,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
-
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
     public List<Datos> data;
@@ -120,14 +119,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
         Call<User> getUser = retrofit.create(UsersInterface.class).getUser(id);
 
 
-
         getUser.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
 
                 if (!response.isSuccessful()) {
 
-                    switch (response.code())  {
+                    switch (response.code()) {
 
                         case 404:
                             Toast.makeText(context, "404", Toast.LENGTH_SHORT).show();
@@ -210,26 +208,44 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
     //Ventana emergenete para eliminar un usuario
     public AlertDialog alertDialog(String id) {
 
-        AlertDialog.Builder constructor = new AlertDialog.Builder(context);
-        constructor.setTitle("Eliminar");
-        constructor.setIcon(context.getDrawable(R.drawable.ic_baseline_deleteop80_24));
-        constructor.setMessage(R.string.Eliminar1);
+        if (UtilsNetwork.isOnline(context)) {
+            AlertDialog.Builder constructor = new AlertDialog.Builder(context);
+            constructor.setTitle("Eliminar");
+            constructor.setIcon(context.getDrawable(R.drawable.ic_baseline_deleteop80_24));
+            constructor.setMessage(R.string.Eliminar1);
 
-        constructor.setPositiveButton(R.string.Eliminarb, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                deleteUser(id);
-            }
-        });
+            constructor.setPositiveButton(R.string.Eliminarb, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    deleteUser(id);
+                }
+            });
 
-        constructor.setNegativeButton(R.string.Cancelar, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
+            constructor.setNegativeButton(R.string.Cancelar, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
 
-        return constructor.create();
+            return constructor.create();
+        } else {
+            AlertDialog.Builder constructor = new AlertDialog.Builder(context);
+            constructor.setTitle("No tan rapido!");
+            constructor.setIcon(context.getDrawable(R.drawable.ic_baseline_deleteop80_24));
+            constructor.setMessage("No puedes eliminar tarjetas sin internet");
+
+            constructor.setNegativeButton(R.string.Aceptar, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+
+            return constructor.create();
+        }
+
+
     }
-
 }
+

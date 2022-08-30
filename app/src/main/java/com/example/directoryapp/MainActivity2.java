@@ -1,6 +1,8 @@
 package com.example.directoryapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -81,11 +83,41 @@ public class MainActivity2 extends AppCompatActivity {
                 boton1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String fullname = et1.getEditText().getText().toString();
-                        String email = et2.getEditText().getText().toString();
-                        int code = Integer.parseInt(et3.getEditText().getText().toString());
 
-                        updateUser(fullname, email, code, id);
+                        final String compruebaname = et1.getEditText().getText().toString();
+                        final String compruebaemail = et2.getEditText().getText().toString().trim();
+                        final String regex = "(?:[^<>()\\[\\].,;:\\s@\"]+(?:\\.[^<>()\\[\\].,;:\\s@" +
+                                "\"]+)*|\"[^\\n\"]+\")@(?:[^<>()\\[\\].,;:\\s@\"]+\\.)+[^<>()\\[\\]" +
+                                "\\.,;:\\s@\"]{2,63}";
+                        final String solotexto = "[a-zA-Z ]+";
+
+                        if (et1.getEditText().getText().toString().isEmpty() ||
+                                et2.getEditText().getText().toString().isEmpty() ||
+                                et3.getEditText().getText().toString().isEmpty()) {
+                            Toast.makeText(MainActivity2.this, "Debes llenar todos los campos", Toast.LENGTH_SHORT).show();
+                        } else if
+                        ((!compruebaname.matches(solotexto))) {
+                            Toast.makeText(MainActivity2.this, "Asegurate de ingresar solo texto y sin acentos en el campo de nombre", Toast.LENGTH_LONG).show();
+                        } else if (et3.getEditText()
+                                .getText().length() > 5) {
+                            Toast.makeText(MainActivity2.this, "El codigo es mayor a 5 digitos", Toast.LENGTH_SHORT).show();
+                        } else if ((!compruebaemail.matches
+                                (regex))) {
+                            Toast.makeText(MainActivity2.this, "Por favor, introduce un correo valido", Toast.LENGTH_LONG).show();
+                        } else if (UtilsNetwork.isOnline(MainActivity2.this)) {
+
+                            String fullname = et1.getEditText().getText().toString();
+                            String email = et2.getEditText().getText().toString();
+                            int code = Integer.parseInt(et3.getEditText().getText().toString());
+
+                            updateUser(fullname, email, code, id);
+
+
+                        } else {
+
+                            Toast.makeText(MainActivity2.this, "Necesitas internet para editar una tarjeta.", Toast.LENGTH_LONG).show();
+                        }
+
                     }
                 });
                 break;
@@ -110,7 +142,7 @@ public class MainActivity2 extends AppCompatActivity {
                             Toast.makeText(MainActivity2.this, "Debes llenar todos los campos", Toast.LENGTH_SHORT).show();
                         } else if
                         ((!compruebaname.matches(solotexto))) {
-                            Toast.makeText(MainActivity2.this, "Asegurate de ingresar solo texto en el campo de nombre", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity2.this, "Asegurate de ingresar solo texto y sin acentos en el campo de nombre", Toast.LENGTH_LONG).show();
                         } else if (et3.getEditText()
                                 .getText().length() > 5) {
                             Toast.makeText(MainActivity2.this, "El codigo es mayor a 5 digitos", Toast.LENGTH_SHORT).show();
