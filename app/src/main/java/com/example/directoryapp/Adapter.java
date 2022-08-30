@@ -182,6 +182,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
         //Hacemos la llamada al endpoint mediante la interfaz
         Call<User> deleteUser = retrofit.create(UsersInterface.class).deleteUser(id);
 
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        adminSQLiteOpenHelper.deleteData(id);
+
         deleteUser.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -203,6 +206,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                 } else {
                     Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show();
                     MainActivity.getUsers();
+
+
                 }
 
             }
@@ -227,9 +232,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     deleteUser(id);
-                    AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
 
-                    adminSQLiteOpenHelper.deleteData();
                 }
             });
 

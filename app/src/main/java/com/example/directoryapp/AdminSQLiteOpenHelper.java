@@ -182,7 +182,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
         return null;
     }
 
-    public boolean deleteData(int _id) {
+    public boolean deleteData(String _id) {
         SQLiteDatabase BaseDeDatos = this.getWritableDatabase();
         boolean correcto = false;
 
