@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView recyclerView;
     private static Adapter adapter;
+    AdminSQLiteOpenHelper adminSQLiteOpenHelper;
 
 
     @Override
@@ -189,4 +190,6 @@ public class MainActivity extends AppCompatActivity {
         adapter.update(data);
 
     }
+
 }
+

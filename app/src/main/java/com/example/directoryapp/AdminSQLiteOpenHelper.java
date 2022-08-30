@@ -137,7 +137,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
     //Check if user is already registered
     public Cursor consultUser() throws SQLException {
         SQLiteDatabase BaseDeDatos = this.getReadableDatabase();
-        
+
 
         try {
             Cursor user = BaseDeDatos.rawQuery("SELECT * FROM " + TUSUARIOS, null);
@@ -157,6 +157,51 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
         return null;
     }
 
+    //Consult user by uid
+    public Cursor consultUserByid(@NonNull String _id) throws SQLException {
+        SQLiteDatabase BaseDeDatos = this.getReadableDatabase();
+
+        try {
+
+            Cursor user = BaseDeDatos.rawQuery("SELECT * FROM " + TUSUARIOS + " WHERE " + COL_0 + " = '" + _id + "'", null);
+
+            if (user.moveToFirst()) {
+                closeDatabase(BaseDeDatos);
+                return user;
+            } else {
+                closeDatabase(BaseDeDatos);
+                return null;
+            }
+
+        } catch (SQLException e) {
+            closeDatabase(BaseDeDatos);
+            e.printStackTrace();
+        }
+
+        closeDatabase(BaseDeDatos);
+        return null;
+    }
+
+    public boolean deleteData(int _id) {
+        SQLiteDatabase BaseDeDatos = this.getWritableDatabase();
+        boolean correcto = false;
+
+        try {
+            BaseDeDatos.execSQL("DELETE FROM " + TUSUARIOS + " WHERE " + COL_0 + " = '" + _id + "'");
+            correcto = true;
+            } catch (SQLException e) {
+            e.toString();
+            correcto = false;
+        } finally {
+            closeDatabase(BaseDeDatos);
+        }
+
+        return correcto;
+    }
 
 }
+
+
+
+
 
