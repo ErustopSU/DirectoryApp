@@ -165,6 +165,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
                     context.startActivity(intent);
                 }
+
             }
 
             @Override
