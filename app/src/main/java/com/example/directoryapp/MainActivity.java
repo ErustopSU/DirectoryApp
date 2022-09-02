@@ -1,33 +1,25 @@
 package com.example.directoryapp;
 
+import static com.example.directoryapp.PreMainActivity.getUsers;
+import static com.example.directoryapp.PreMainActivity.getUsersSQLite;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.SearchView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.database.Cursor;
-import android.os.Bundle;
-import android.view.View;
-import android.view.contentcapture.DataShareWriteAdapter;
-import android.widget.SearchView;
-import android.widget.Toast;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-
-import static com.example.directoryapp.PreMainActivity.getUsers;
-import static com.example.directoryapp.PreMainActivity.getUsersSQLite;
-
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     SearchView txtBuscar;
     FloatingActionButton boton1;
@@ -61,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false);
-                sincronizeUsers();
+               sincronizeUsers();
             }
 
         });
@@ -94,18 +86,19 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public void onResume() {
         super.onResume();
 
-        sincronizeUsers();
+       sincronizeUsers();
     }
 
     private void sincronizeUsers() {
         if (UtilsNetwork.isOnline(this)) {
             Toast.makeText(this, "Si hay internet", Toast.LENGTH_SHORT).show();
-
             getUsers();
+            System.out.println(usersRetrofit.size());
+            System.out.println("Probandooo");
 
             //RETROFIT
             for (int i = 0; i < usersRetrofit.size(); i++) {
-
+                System.out.println("ID ANTES DEL for: " + usersRetrofit.get(i).getId().length());
                 //SQLITE
                 for (int j = 0; j < usersSQLite.size(); j++) {
 
