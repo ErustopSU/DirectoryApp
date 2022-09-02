@@ -1,4 +1,4 @@
-# Reto Android | DirectoryApp
+# Reto Android V-1.2 | DirectoryApp
 
 Actualmente este proyecto está en desarrollo
 
