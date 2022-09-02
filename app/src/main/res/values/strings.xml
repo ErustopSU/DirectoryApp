@@ -4,4 +4,5 @@
     <string name="Eliminar1">Estás seguro de eliminar del directorio?</string>
     <string name="Eliminarb">Eliminar</string>
     <string name="Cancelar">Cancelar</string>
+    <string name="Aceptar">Aceptar</string>
 </resources>

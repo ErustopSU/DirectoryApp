@@ -20,6 +20,8 @@ public class User {
     @SerializedName("_id")
     private String id;
 
+
+
     //Metodos Getter
 
     public String getFullname() {

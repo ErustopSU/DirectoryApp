@@ -1,9 +1,12 @@
 package com.example.directoryapp;
 
+import static com.example.directoryapp.MainActivity.getUsers;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,7 +33,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
     public List<Datos> data;
     private Context context;
+    ArrayList<Datos> listaSearchView;
 
+    AdminSQLiteOpenHelper adminSQLiteOpenHelper;
 
     //Constructor
     public Adapter(Context context, ArrayList<Datos> data) {
@@ -61,7 +68,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
             holder.fullname.setText("Nombre: " + datas.getFullname());
             holder.email.setText("Correo: " + datas.getEmail());
-            holder.code.setText("Código: " + String.valueOf(datas.getCode()));
+            holder.code.setText("Código: " + datas.getCode());
 
             //Se Asignan funciones de acción al cardview
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -76,11 +83,20 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                 @Override
                 public void onClick(View view) {
 
-                    getUser(id, "ACTUALIZAR");
+                    if (UtilsNetwork.isOnline(context)) {
+
+                        getUser(id, "ACTUALIZAR");
+
+                    } else {
+                        Toast.makeText(context, "No puedes editar tarjetas sin conexión a internet.", Toast.LENGTH_LONG).show();
+
+
+                    }
                 }
             });
 
             holder.deleteboton.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public void onClick(View view) {
                     alertDialog(id).show();
@@ -89,6 +105,30 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
         }
 
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void filtrado(String txtBuscar){
+        int longitud = txtBuscar.length();
+        if(longitud == 0){
+            getUsers();
+        }else{
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                List<Datos> coleccion = data.stream().filter(i -> i.getFullname().toLowerCase()
+                        .contains(txtBuscar.toLowerCase())).collect(Collectors.toList());
+
+                data.clear();
+                data.addAll(coleccion);
+            } else{
+                for (Datos d: data) {
+                    if(d.getFullname().toLowerCase().contains(txtBuscar.toLowerCase())){
+                        data.add(d);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
 
     //Retorna la cantidad total de datos que tengamos, si tenemos 1 un usuario retorna 1
     @Override
@@ -112,8 +152,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
         }
     }
 
-    //Get user by id
-    private void getUser(String id, String method) {
+    //Get user by id RETROFIT
+    public void getUser(String id, String method) {
 
         Retrofit retrofit = RetrofitClient.getRetrofitClient();
 
@@ -125,7 +165,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
                 if (!response.isSuccessful()) {
 
-                    switch (response.code())  {
+                    switch (response.code()) {
 
                         case 404:
                             Toast.makeText(context, "404", Toast.LENGTH_SHORT).show();
@@ -138,10 +178,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                     }
 
                 } else {
-
-                    AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
-
-                    adminSQLiteOpenHelper.consultUserBy_id(id);
 
                     User user = response.body();
 
@@ -160,6 +196,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
                     context.startActivity(intent);
                 }
+
             }
 
             @Override
@@ -176,6 +213,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
         Retrofit retrofit = RetrofitClient.getRetrofitClient();
         //Hacemos la llamada al endpoint mediante la interfaz
         Call<User> deleteUser = retrofit.create(UsersInterface.class).deleteUser(id);
+
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        adminSQLiteOpenHelper.deleteData(id);
 
         deleteUser.enqueue(new Callback<User>() {
             @Override
@@ -197,7 +237,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                     }
                 } else {
                     Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show();
-                    MainActivity.getUsers();
+                    getUsers();
+
+
                 }
 
             }
@@ -210,28 +252,48 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
     }
 
     //Ventana emergenete para eliminar un usuario
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public AlertDialog alertDialog(String id) {
 
-        AlertDialog.Builder constructor = new AlertDialog.Builder(context);
-        constructor.setTitle("Eliminar");
-        constructor.setIcon(context.getDrawable(R.drawable.ic_baseline_deleteop80_24));
-        constructor.setMessage(R.string.Eliminar1);
+        if (UtilsNetwork.isOnline(context)) {
+            AlertDialog.Builder constructor = new AlertDialog.Builder(context);
+            constructor.setTitle("Eliminar");
+            constructor.setIcon(context.getDrawable(R.drawable.ic_baseline_deleteop80_24));
+            constructor.setMessage(R.string.Eliminar1);
 
-        constructor.setPositiveButton(R.string.Eliminarb, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                deleteUser(id);
-            }
-        });
+            constructor.setPositiveButton(R.string.Eliminarb, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    deleteUser(id);
 
-        constructor.setNegativeButton(R.string.Cancelar, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
+                }
+            });
 
-        return constructor.create();
+            constructor.setNegativeButton(R.string.Cancelar, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+
+            return constructor.create();
+        } else {
+            AlertDialog.Builder constructor = new AlertDialog.Builder(context);
+            constructor.setTitle("¡No tan rápido!");
+            constructor.setIcon(context.getDrawable(R.drawable.ic_baseline_block_24));
+            constructor.setMessage("No puedes eliminar tarjetas sin conexión a internet.");
+
+            constructor.setNegativeButton(R.string.Aceptar, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+
+            return constructor.create();
+        }
+
+
     }
-
 }
+

@@ -1,4 +1,5 @@
 package com.example.directoryapp;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -6,22 +7,26 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Retrofit;
+
+public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final int DB_VERSION = 2;
     private static final String DB_NAME = "BASE DE DATOS";
 
-    private static final String TUSUARIOS = "TUSUARIOS";
+    public static final String TUSUARIOS = "TUSUARIOS";
     private static final String COL_0 = "ID";
     private static final String COL_1 = "FULLNAME";
     private static final String COL_2 = "EMAIL";
     private static final String COL_3 = "CODE";
-
 
 
     //Constructor
@@ -45,7 +50,6 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         );
 
 
-
     }
 
 
@@ -58,13 +62,12 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
 
     //Insertar datos a la base de datos :v
     public boolean registerUser(
-
             @NonNull String _id,
             @NonNull String fullname,
             @NonNull String email,
             @NonNull String code
 
-            ) throws SQLException {
+    ) throws SQLException {
         SQLiteDatabase BaseDeDatos = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -78,14 +81,13 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
             long result = BaseDeDatos.insert(TUSUARIOS, null, values);
 
             closeDatabase(BaseDeDatos);
-        return result != -1;
+            return result != -1;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
 
     }
-
 
 
     //Close database
@@ -110,15 +112,22 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
 
         SQLiteDatabase BaseDeDatos = this.getWritableDatabase();
 
+       /* //probando condicion para crear un registro si no existe en SQLite
+        if (!COL_0.matches(_id)) {
+            registerUser(_id, fullname, email, code);  //TODO: hacer un muevo metodo aparte
+            System.out.println("Match");
+        } else {
+            System.out.println("Dont match");
+        }*/
+
         try {
             ContentValues values = new ContentValues();
 
-            values.put(COL_0, _id);
             values.put(COL_1, fullname);
             values.put(COL_2, email);
             values.put(COL_3, code);
 
-            int user = BaseDeDatos.update(TUSUARIOS, values, null, null);
+            int user = BaseDeDatos.update(TUSUARIOS, values, COL_0 + " = '" + _id + "'", null);
 
             closeDatabase(BaseDeDatos);
             return user;
@@ -154,7 +163,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
     }
 
     //Consult user by uid
-    public Cursor consultUserBy_id(@NonNull String _id) throws SQLException {
+    public Cursor consultUserByid(@NonNull String _id) throws SQLException {
         SQLiteDatabase BaseDeDatos = this.getReadableDatabase();
 
         try {
@@ -178,5 +187,25 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper{
         return null;
     }
 
+    public boolean deleteData(String _id) {
+        SQLiteDatabase BaseDeDatos = this.getWritableDatabase();
+        boolean correcto = false;
+
+        try {
+            BaseDeDatos.execSQL("DELETE FROM " + TUSUARIOS + " WHERE " + COL_0 + " = '" + _id + "'");
+            correcto = true;
+        } catch (SQLException e) {
+            e.toString();
+            correcto = false;
+        } finally {
+            closeDatabase(BaseDeDatos);
+        }
+
+        return correcto;
+    }
 }
+
+
+
+
 
