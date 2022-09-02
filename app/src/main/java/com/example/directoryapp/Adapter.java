@@ -33,7 +33,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
     public List<Datos> data;
     private Context context;
-    ArrayList<Datos> listaSearchView;
+
 
     AdminSQLiteOpenHelper adminSQLiteOpenHelper;
 
