@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private static Adapter adapter;
 
     List<User> usersSQLite = new ArrayList<>();
-    private static List<User> usersRetrofit = new ArrayList();
+    public static List<User> usersRetrofit = new ArrayList();
 
     private String _id;
     private String fullname;
