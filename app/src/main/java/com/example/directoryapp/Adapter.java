@@ -1,6 +1,5 @@
 package com.example.directoryapp;
 
-import static com.example.directoryapp.MainActivity.getUsers;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -27,12 +26,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.example.directoryapp.PreMainActivity.getUsers;
 
 
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
     public List<Datos> data;
     private Context context;
+    public List<Datos> dataBuscador;
 
 
     AdminSQLiteOpenHelper adminSQLiteOpenHelper;
@@ -41,6 +42,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
     public Adapter(Context context, ArrayList<Datos> data) {
         this.context = context;
         this.data = data;
+
+        dataBuscador = new ArrayList<>();
+        dataBuscador.addAll(data);
+
+
     }
 
     //Actualizar los datos
@@ -119,7 +125,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                 data.clear();
                 data.addAll(coleccion);
             } else{
-                for (Datos d: data) {
+                for (Datos d: dataBuscador) {
                     if(d.getFullname().toLowerCase().contains(txtBuscar.toLowerCase())){
                         data.add(d);
                     }
