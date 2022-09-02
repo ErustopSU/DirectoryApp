@@ -2,12 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.directoryapp">
-<uses-sdk tools:overrideLibrary="android.app, android.support.test, android.support.test.rule, android.support.test.espresso, android.support.test.espresso.idling, android.support.test.uiautomator.v18, com.android.car.ui"/>
+
+    <uses-sdk tools:overrideLibrary="android.app, android.support.test, android.support.test.rule, android.support.test.espresso, android.support.test.espresso.idling, android.support.test.uiautomator.v18, com.android.car.ui" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -20,23 +22,22 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".PreMainActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity
+            android:name=".MainActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity2"
             android:exported="false" />
-
-
     </application>
 
 </manifest>
