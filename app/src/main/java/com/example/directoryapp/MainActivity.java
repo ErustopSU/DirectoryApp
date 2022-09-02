@@ -24,6 +24,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.example.directoryapp.PreMainActivity.getUsers;
+import static com.example.directoryapp.PreMainActivity.getUsersSQLite;
+
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     SearchView txtBuscar;
@@ -139,84 +142,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
-    //metodo getUsers con SQLite
-    public void getUsersSQLite() {
-        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(MainActivity.this);
-
-        Cursor cursor = adminSQLiteOpenHelper.consultUser();
-        User user;
-
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-
-                do {
-                    user = new User();
-
-                    user.setId(String.valueOf(cursor.getInt(0)));
-                    user.setFullname(cursor.getString(1));
-                    user.setEmail(cursor.getString(2));
-                    user.setCode(Integer.parseInt(cursor.getString(3)));
-
-                    boolean isUserExist = false;
-
-                    for (int i = 0; i < usersSQLite.size(); i++) {
-                        if (usersSQLite.get(i).getId().equals(user.getId())) isUserExist = true;
-                    }
-
-                    if (!isUserExist) usersSQLite.add(user);
-
-
-                } while (cursor.moveToNext());
-            }
-
-            populateUsers(usersSQLite);
-            cursor.close();
-        }
-    }
-
-    //metodo getUsers con Retrofit
-    public static void getUsers() {
-        //Crear conexion al API
-        Retrofit retrofit = RetrofitClient.getRetrofitClient();
-
-        //Creando la llamada al endpoint del api correspondiente
-        Call<List<User>> call = retrofit.create(UsersInterface.class).listaUsers();
-
-        //Ejecutamos la llamada
-        call.enqueue(new Callback<List<User>>() {
-            @Override
-            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
-
-                //Si la respuesta NO es satisfactoria
-                if (!response.isSuccessful()) {
-
-                    //Obtener el codigo de respuesta de la peticion para poder controlar las validaciones
-                    switch (response.code()) {
-                        case 500:
-                            System.out.println("500");
-                            break;
-                        case 404:
-                            System.out.println("404");
-                            break;
-                        default:
-                            System.out.println("Error: " + response.code());
-                    }
-
-                    //Si la respuesta es satisfactoria
-                } else {
-                    usersRetrofit = response.body();
-
-                    populateUsers(usersRetrofit);
-                }
-            }
-
-            //En el caso de que la peticion falle
-            @Override
-            public void onFailure(Call<List<User>> call, Throwable t) {
-                System.out.println("Error: " + t.getMessage());
-            }
-        });
-    }
 
     //Configurar RecyclerView
     private void setRecyclerView() {
@@ -228,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     //Poblamos la data en las tarjetas mediante el adapter
-    private static void populateUsers(List<User> usersList) {
+    public static void populateUsers(List<User> usersList) {
         List<Datos> data = new ArrayList<>();
 
         for (User user : usersList) {

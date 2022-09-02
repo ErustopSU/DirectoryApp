@@ -1,6 +1,5 @@
 package com.example.directoryapp;
 
-import static com.example.directoryapp.MainActivity.getUsers;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -27,6 +26,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.example.directoryapp.PreMainActivity.getUsers;
 
 
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
