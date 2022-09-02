@@ -29,6 +29,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
     private Context context;
 
 
+    AdminSQLiteOpenHelper adminSQLiteOpenHelper;
+
     //Constructor
     public Adapter(Context context, ArrayList<Datos> data) {
         this.context = context;
@@ -75,7 +77,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                 @Override
                 public void onClick(View view) {
 
-                    getUser(id, "ACTUALIZAR");
+                    if (UtilsNetwork.isOnline(context)) {
+
+                        getUser(id, "ACTUALIZAR");
+
+                    } else {
+                        Toast.makeText(context, "No puedes editar tarjetas sin conexión a internet.", Toast.LENGTH_LONG).show();
+
+
+                    }
                 }
             });
 
@@ -111,13 +121,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
         }
     }
 
-    //Get user by id
+    //Get user by id RETROFIT
     private void getUser(String id, String method) {
 
         Retrofit retrofit = RetrofitClient.getRetrofitClient();
 
         Call<User> getUser = retrofit.create(UsersInterface.class).getUser(id);
-
 
         getUser.enqueue(new Callback<User>() {
             @Override
@@ -156,6 +165,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
                     context.startActivity(intent);
                 }
+
             }
 
             @Override
@@ -172,6 +182,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
         Retrofit retrofit = RetrofitClient.getRetrofitClient();
         //Hacemos la llamada al endpoint mediante la interfaz
         Call<User> deleteUser = retrofit.create(UsersInterface.class).deleteUser(id);
+
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        adminSQLiteOpenHelper.deleteData(id);
 
         deleteUser.enqueue(new Callback<User>() {
             @Override
@@ -194,6 +207,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                 } else {
                     Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show();
                     MainActivity.getUsers();
+
+
                 }
 
             }
@@ -218,6 +233,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     deleteUser(id);
+
                 }
             });
 
@@ -231,9 +247,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
             return constructor.create();
         } else {
             AlertDialog.Builder constructor = new AlertDialog.Builder(context);
-            constructor.setTitle("No tan rapido!");
-            constructor.setIcon(context.getDrawable(R.drawable.ic_baseline_deleteop80_24));
-            constructor.setMessage("No puedes eliminar tarjetas sin internet");
+            constructor.setTitle("¡No tan rápido!");
+            constructor.setIcon(context.getDrawable(R.drawable.ic_baseline_block_24));
+            constructor.setMessage("No puedes eliminar tarjetas sin conexión a internet.");
 
             constructor.setNegativeButton(R.string.Aceptar, new DialogInterface.OnClickListener() {
                 @Override

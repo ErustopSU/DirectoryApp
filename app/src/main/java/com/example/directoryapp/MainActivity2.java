@@ -8,10 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.material.textfield.TextInputLayout;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -176,8 +180,10 @@ public class MainActivity2 extends AppCompatActivity {
         user.setCode(Integer.parseInt(et3.getEditText().getText().toString()));
 
         return user;
+
     }
-        //Crear usuarios Retrofit
+
+    //Crear usuarios Retrofit
     private void createUser(User user) {
 
         //Hacemos la conexion con
@@ -200,7 +206,7 @@ public class MainActivity2 extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject(result);
                                 String message = jsonObject.getString("message");
 
-                                switch(message){
+                                switch (message) {
                                     case "Email already exist!":
                                         Toast.makeText(MainActivity2.this, "Este correo ya existe!", Toast.LENGTH_SHORT).show();
                                         break;
@@ -212,7 +218,7 @@ public class MainActivity2 extends AppCompatActivity {
                                         break;
                                 }
 
-                           } catch (IOException | JSONException e) {
+                            } catch (IOException | JSONException e) {
                                 e.printStackTrace();
                             }
                             break;
@@ -248,12 +254,8 @@ public class MainActivity2 extends AppCompatActivity {
 
     }
 
-
-
     //Update user by id Retrofit
     private void updateUser(String fullname, String email, int code, String id) {
-
-
         Retrofit retrofit = RetrofitClient.getRetrofitClient();
 
         Call<User> updateUser = retrofit.create(UsersInterface.class).updateUser(id, fullname, email, code);
@@ -278,7 +280,7 @@ public class MainActivity2 extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject(result);
                                 String message = jsonObject.getString("message");
 
-                                switch(message){
+                                switch (message) {
                                     case "Email already exist!":
                                         Toast.makeText(MainActivity2.this, "Este correo ya existe!", Toast.LENGTH_SHORT).show();
                                         break;
@@ -323,7 +325,7 @@ public class MainActivity2 extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
+                System.out.println("Error: " + t.getMessage());
             }
         });
     }

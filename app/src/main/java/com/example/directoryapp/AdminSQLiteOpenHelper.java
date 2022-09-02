@@ -7,11 +7,15 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Retrofit;
 
 public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
@@ -58,7 +62,6 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
     //Insertar datos a la base de datos :v
     public boolean registerUser(
-
             @NonNull String _id,
             @NonNull String fullname,
             @NonNull String email,
@@ -109,10 +112,13 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase BaseDeDatos = this.getWritableDatabase();
 
-        //probando condicion para crear un registro si no existe en SQLite
+       /* //probando condicion para crear un registro si no existe en SQLite
         if (!COL_0.matches(_id)) {
-            registerUser(_id, fullname, email, code);  //Metodo que Enyer inventó y le funcionó :'D
-        }
+            registerUser(_id, fullname, email, code);  //TODO: hacer un muevo metodo aparte
+            System.out.println("Match");
+        } else {
+            System.out.println("Dont match");
+        }*/
 
         try {
             ContentValues values = new ContentValues();
@@ -137,7 +143,6 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
     //Check if user is already registered
     public Cursor consultUser() throws SQLException {
         SQLiteDatabase BaseDeDatos = this.getReadableDatabase();
-        
 
         try {
             Cursor user = BaseDeDatos.rawQuery("SELECT * FROM " + TUSUARIOS, null);
@@ -157,6 +162,50 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
         return null;
     }
 
+    //Consult user by uid
+    public Cursor consultUserByid(@NonNull String _id) throws SQLException {
+        SQLiteDatabase BaseDeDatos = this.getReadableDatabase();
 
+        try {
+
+            Cursor user = BaseDeDatos.rawQuery("SELECT * FROM " + TUSUARIOS + " WHERE " + COL_0 + " = '" + _id + "'", null);
+
+            if (user.moveToFirst()) {
+                closeDatabase(BaseDeDatos);
+                return user;
+            } else {
+                closeDatabase(BaseDeDatos);
+                return null;
+            }
+
+        } catch (SQLException e) {
+            closeDatabase(BaseDeDatos);
+            e.printStackTrace();
+        }
+
+        closeDatabase(BaseDeDatos);
+        return null;
+    }
+
+    public boolean deleteData(String _id) {
+        SQLiteDatabase BaseDeDatos = this.getWritableDatabase();
+        boolean correcto = false;
+
+        try {
+            BaseDeDatos.execSQL("DELETE FROM " + TUSUARIOS + " WHERE " + COL_0 + " = '" + _id + "'");
+            correcto = true;
+        } catch (SQLException e) {
+            e.toString();
+            correcto = false;
+        } finally {
+            closeDatabase(BaseDeDatos);
+        }
+
+        return correcto;
+    }
 }
+
+
+
+
 

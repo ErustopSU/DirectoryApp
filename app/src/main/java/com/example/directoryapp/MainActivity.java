@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.view.contentcapture.DataShareWriteAdapter;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,6 +29,13 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     private static Adapter adapter;
 
+    List<User> usersSQLite = new ArrayList<>();
+    private static List<User> usersRetrofit = new ArrayList();
+
+    private String _id;
+    private String fullname;
+    private String email;
+    private String code;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,26 +46,20 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview);
         boton1 = findViewById(R.id.floatingActionButton);
 
+        setRecyclerView();
+        sincronizeUsers();
 
         //Se Asigna una función de <actualizar> a la pantalla principal haciendo swipedown(deslizar hacia abajo)
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false);
-                if (UtilsNetwork.isOnline(MainActivity.this)) {
-                    getUsers();
-
-                } else {
-                    Toast.makeText(MainActivity.this, "Cargando datos sin internet", Toast.LENGTH_LONG).show();
-                    getUsersSQLite();
-
-                }
+                sincronizeUsers();
             }
 
         });
 
-        setRecyclerView();
-        getUsers();
+        //  getUsers();
 
         //Se asigna al boton "+" pasar de la primera pantalla a la segunda, (Sería la acción "CREAR")
         boton1.setOnClickListener(new View.OnClickListener() {
@@ -81,16 +83,54 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
+        super.onResume();
+
+        sincronizeUsers();
+    }
+
+    private void sincronizeUsers() {
         if (UtilsNetwork.isOnline(this)) {
+            Toast.makeText(this, "Si hay internet", Toast.LENGTH_SHORT).show();
+
             getUsers();
-            super.onResume();
+
+            //RETROFIT
+            for (int i = 0; i < usersRetrofit.size(); i++) {
+
+                //SQLITE
+                for (int j = 0; j < usersSQLite.size(); j++) {
+
+                    String RETROFIT = usersRetrofit.get(i).getId();
+                    String fullname = usersRetrofit.get(i).getFullname();
+                    String email = usersRetrofit.get(i).getEmail();
+                    String code = String.valueOf(usersRetrofit.get(i).getCode());
+                    String SQL = usersSQLite.get(j).getId();
+
+                    System.out.println("ID: " + SQL + ", FULLNAME: " + fullname + ", EMAIL: " + email + ", CODE: " + code + ".");
+                    System.out.println("Sincronizando...");
+                    System.out.println(RETROFIT);
+                    System.out.println("123");
+                    System.out.println(SQL);
+                    System.out.println(usersRetrofit.get(i).getFullname());
+
+
+                    if (usersSQLite.contains(RETROFIT)) {
+                        System.out.println("User found");
+                    } else {
+                        System.out.println("User not found");
+                        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(this);
+
+                        adminSQLiteOpenHelper.registerUser(_id, fullname, email, code);
+                        //TODO: Method create user in SQLite -> Retrofit
+                    }
+                }
+            }
 
         } else {
-            getUsersSQLite();
-            super.onResume();
-
             Toast.makeText(MainActivity.this, "Cargando datos sin internet", Toast.LENGTH_LONG).show();
+
+            getUsersSQLite();
         }
     }
 
@@ -99,31 +139,34 @@ public class MainActivity extends AppCompatActivity {
         AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(MainActivity.this);
 
         Cursor cursor = adminSQLiteOpenHelper.consultUser();
-        List<User> usersSQLite = new ArrayList<>();
         User user;
 
-        System.out.println("User size: " + cursor.getCount());
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+
+                do {
+                    user = new User();
+
+                    user.setId(String.valueOf(cursor.getInt(0)));
+                    user.setFullname(cursor.getString(1));
+                    user.setEmail(cursor.getString(2));
+                    user.setCode(Integer.parseInt(cursor.getString(3)));
+
+                    boolean isUserExist = false;
+
+                    for (int i = 0; i < usersSQLite.size(); i++) {
+                        if (usersSQLite.get(i).getId().equals(user.getId())) isUserExist = true;
+                    }
+
+                    if (!isUserExist) usersSQLite.add(user);
 
 
-        if (cursor.moveToFirst()) {
+                } while (cursor.moveToNext());
+            }
 
-            do {
-                user = new User();
-                user.setId(String.valueOf(cursor.getInt(0)));
-                user.setFullname(cursor.getString(1));
-                user.setEmail(cursor.getString(2));
-                user.setCode(Integer.parseInt(cursor.getString(3)));
-                usersSQLite.add(user);
-
-                populateUsers(usersSQLite);
-
-                System.out.println(cursor.getString(1));
-                System.out.println(user);
-
-            } while (cursor.moveToNext());
+            populateUsers(usersSQLite);
+            cursor.close();
         }
-        cursor.close();
-        return;
     }
 
     //metodo getUsers con Retrofit
@@ -156,8 +199,9 @@ public class MainActivity extends AppCompatActivity {
 
                     //Si la respuesta es satisfactoria
                 } else {
-                    List<User> users = response.body();
-                    populateUsers(users);
+                    usersRetrofit = response.body();
+
+                    populateUsers(usersRetrofit);
                 }
             }
 
@@ -186,7 +230,11 @@ public class MainActivity extends AppCompatActivity {
 
             data.add(new Datos(user.getId(), user.getFullname(), user.getEmail(), String.valueOf(user.getCode())));
         }
+
         adapter.update(data);
 
     }
+
+
 }
+
