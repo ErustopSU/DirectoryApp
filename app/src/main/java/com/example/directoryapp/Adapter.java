@@ -1,9 +1,12 @@
 package com.example.directoryapp;
 
+import static com.example.directoryapp.MainActivity.getUsers;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,11 +28,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
+
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
     public List<Datos> data;
     private Context context;
-
+    ArrayList<Datos> listaSearchView;
 
     AdminSQLiteOpenHelper adminSQLiteOpenHelper;
 
@@ -90,6 +96,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
             });
 
             holder.deleteboton.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public void onClick(View view) {
                     alertDialog(id).show();
@@ -98,6 +105,30 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
         }
 
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void filtrado(String txtBuscar){
+        int longitud = txtBuscar.length();
+        if(longitud == 0){
+            getUsers();
+        }else{
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                List<Datos> coleccion = data.stream().filter(i -> i.getFullname().toLowerCase()
+                        .contains(txtBuscar.toLowerCase())).collect(Collectors.toList());
+
+                data.clear();
+                data.addAll(coleccion);
+            } else{
+                for (Datos d: data) {
+                    if(d.getFullname().toLowerCase().contains(txtBuscar.toLowerCase())){
+                        data.add(d);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
 
     //Retorna la cantidad total de datos que tengamos, si tenemos 1 un usuario retorna 1
     @Override
@@ -122,7 +153,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
     }
 
     //Get user by id RETROFIT
-    private void getUser(String id, String method) {
+    public void getUser(String id, String method) {
 
         Retrofit retrofit = RetrofitClient.getRetrofitClient();
 
@@ -206,7 +237,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                     }
                 } else {
                     Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show();
-                    MainActivity.getUsers();
+                    getUsers();
 
 
                 }
@@ -221,6 +252,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
     }
 
     //Ventana emergenete para eliminar un usuario
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public AlertDialog alertDialog(String id) {
 
         if (UtilsNetwork.isOnline(context)) {
