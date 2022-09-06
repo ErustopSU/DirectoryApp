@@ -1,6 +1,8 @@
 package com.example.directoryapp;
 
 
+import android.widget.ImageView;
+
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -22,6 +24,7 @@ public interface UsersInterface {
     @GET ("users/{id}")
     Call<User> getUser(@Path("id") String id);
 
+
     //Crea un usuario con todos los campos llenos (fullname, email, code)
     @POST ("users/create")
     Call<User> createUser(@Body User user);
@@ -34,5 +37,8 @@ public interface UsersInterface {
     //Elimina un usuario en especifico
     @DELETE ("users/delete/{id}")
     Call<User> deleteUser(@Path("id") String id);
+
+    @GET("search")
+    Call<List<ImageCats>> getImageCats();
 
 }

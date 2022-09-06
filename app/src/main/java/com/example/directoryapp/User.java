@@ -1,13 +1,12 @@
 package com.example.directoryapp;
 
+import android.widget.ImageView;
+
 import com.google.gson.annotations.SerializedName; //La anotación @SerializedName indica que el miembro anotado debe serializarse en JSON
-                                                   // con el valor de nombre proporcionado en el atributo de anotación. Esta anotación anulará cualquier correo electrónico FieldNamingPolicy,
-                                                   //incluida la política de nomenclatura de campos predeterminada, que pueda haber estado usando la GsonBuilderclase.
+// con el valor de nombre proporcionado en el atributo de anotación. Esta anotación anulará cualquier correo electrónico FieldNamingPolicy,
+//incluida la política de nomenclatura de campos predeterminada, que pueda haber estado usando la GsonBuilderclase.
 
 public class User {
-
-
-
     @SerializedName("fullname")
     private String fullname;
 
@@ -20,10 +19,7 @@ public class User {
     @SerializedName("_id")
     private String id;
 
-
-
     //Metodos Getter
-
     public String getFullname() {
         return fullname;
     }
@@ -32,11 +28,15 @@ public class User {
         return email;
     }
 
-    public  int getCode() {
+    public int getCode() {
         return code;
     }
 
-    public String getId() {return id;}
+    public String getId() {
+        return id;
+    }
+
+
     //Metodos Setter
 
     public void setFullname(String fullname) {
@@ -51,5 +51,9 @@ public class User {
         this.code = code;
     }
 
-    public void setId(String id){this.id = id;}
+    public void setId(String id) {
+        this.id = id;
+    }
+
+
 }

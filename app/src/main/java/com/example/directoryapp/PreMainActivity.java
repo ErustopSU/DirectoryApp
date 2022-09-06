@@ -1,13 +1,12 @@
 package com.example.directoryapp;
 
-import static com.example.directoryapp.MainActivity.populateUsers;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,14 +18,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-
 public class PreMainActivity extends AppCompatActivity {
 
     public static List<User> usersSQLite = new ArrayList<>();
     public static List<User> usersRetrofit = new ArrayList();
+    public static List<ImageCats> catitos = new ArrayList<>();
+
     private static Context context;
     private Button botonIngresar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +41,13 @@ public class PreMainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(PreMainActivity.this, MainActivity.class);
                 startActivity(intent);
-
             }
         });
 
-
-
+        //Load data
+        getUsersSQLite();
+        getUsers();
+        getCatitos();
     }
 
     //metodo getUsers con SQLite
@@ -81,8 +81,11 @@ public class PreMainActivity extends AppCompatActivity {
                 } while (cursor.moveToNext());
             }
 
-            populateUsers(usersSQLite);
+            System.out.println("Users SQLite size: " + usersSQLite.size());
+            //populateUsers(usersSQLite);
             cursor.close();
+        } else {
+            System.out.println("Users SQLite size: 0");
         }
     }
 
@@ -118,7 +121,9 @@ public class PreMainActivity extends AppCompatActivity {
                 } else {
                     usersRetrofit = response.body();
 
-                    populateUsers(usersRetrofit);
+                    System.out.println("Users retrofit size: " + usersRetrofit.size());
+
+                    //populateUsers(usersRetrofit);
                 }
             }
 
@@ -130,6 +135,31 @@ public class PreMainActivity extends AppCompatActivity {
         });
     }
 
+    //Method get list cats
+    private void getCatitos() {
+        Retrofit retrofit = RetrofitClient.getRetrofitClient2();
+
+        Call<List<ImageCats>> call = retrofit.create(UsersInterface.class).getImageCats();
+
+        call.enqueue(new Callback<List<ImageCats>>() {
+            @Override
+            public void onResponse(Call<List<ImageCats>> call, Response<List<ImageCats>> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(PreMainActivity.this, "Error: " + response.errorBody(), Toast.LENGTH_SHORT).show();
+                } else {
+                    catitos = response.body();
+
+                    System.out.println("Size cats: " + catitos.size());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ImageCats>> call, Throwable t) {
+                Toast.makeText(PreMainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                System.out.println("Error: " + t.getMessage());
+            }
+        });
+    }
 
 
 }

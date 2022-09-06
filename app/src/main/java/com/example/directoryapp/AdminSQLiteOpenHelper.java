@@ -84,7 +84,6 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
     }
 
-
     //Close database
     public void closeDatabase(SQLiteDatabase BaseDeDatos) {
         try {

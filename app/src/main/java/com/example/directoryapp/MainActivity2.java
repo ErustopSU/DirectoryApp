@@ -61,8 +61,14 @@ public class MainActivity2 extends AppCompatActivity {
         switch (method) {
             case "OBTENER":
                 boton1.setVisibility(View.GONE);
-
                 tv1.setText("VISTA DE LA TARJETA");
+
+                /*try {
+                    GatosService.verGatos();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
+
                 boton2.setText("REGRESAR");
 
                 TextInputLayout til1 = (TextInputLayout) findViewById(R.id.cajaet1);
@@ -236,7 +242,7 @@ public class MainActivity2 extends AppCompatActivity {
                     String email = et2.getEditText().getText().toString();
                     String code = et3.getEditText().getText().toString();
 
-                    Toast.makeText(MainActivity2.this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity2.this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show();
                     AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(MainActivity2.this);
 
                     adminSQLiteOpenHelper.registerUser(_id, fullname, email, code);
@@ -316,6 +322,8 @@ public class MainActivity2 extends AppCompatActivity {
                     adminSQLiteOpenHelper.updateUser(_id, fullname, email, code);
 
                     Toast.makeText(MainActivity2.this, "Usuario actualizado", Toast.LENGTH_SHORT).show();
+
+
 
 
                     finish();

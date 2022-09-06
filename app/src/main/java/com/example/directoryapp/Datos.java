@@ -1,17 +1,22 @@
 package com.example.directoryapp;
 
+import android.widget.ImageView;
+
 public class Datos {
+
     private String id;
     private String fullname;
     private String email;
     private String code;
+    private String url;
 
     //Constructor
-    public Datos(String id, String fullname, String email, String code) {
+    public Datos(String id, String fullname, String email, String code, String url) {
         this.id = id;
         this.fullname = fullname;
         this.email = email;
         this.code = code;
+        this.url = url;
     }
 
     //Metodos Getter y Setter
@@ -46,5 +51,13 @@ public class Datos {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

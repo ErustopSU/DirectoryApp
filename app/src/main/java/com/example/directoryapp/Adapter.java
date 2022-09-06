@@ -2,21 +2,38 @@ package com.example.directoryapp;
 
 
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +43,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static android.provider.CalendarContract.CalendarCache.URI;
 import static com.example.directoryapp.PreMainActivity.getUsers;
 
 
@@ -35,8 +53,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
     private Context context;
     public List<Datos> dataBuscador;
 
+    private ArrayList<ImageView> dataset;
+    private ImageView imagen;
+    static Bitmap bitmap;
+    String urlImage = "https://api.thecatapi.com/v1/images/";
 
-    AdminSQLiteOpenHelper adminSQLiteOpenHelper;
 
     //Constructor
     public Adapter(Context context, ArrayList<Datos> data) {
@@ -45,8 +66,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
         dataBuscador = new ArrayList<>();
         dataBuscador.addAll(data);
-
-
+        dataset = new ArrayList<>();
+        new GetImageFromUrl(imagen).execute(urlImage);
     }
 
     //Actualizar los datos
@@ -59,14 +80,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
     @NonNull
     @Override
     public Adapter.MyViewHolderAdapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyViewHolderAdapter(
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview, parent, false));
+        return new MyViewHolderAdapter(LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview, parent, false));
     }
 
     //Asignar los datos y asignar funciones a los metodos en el caso de que sea necesario
     @Override
     public void onBindViewHolder(@NonNull Adapter.MyViewHolderAdapter holder, int position) {
-
         if (data != null && data.size() > 0) {
             Datos datas = data.get(position);
 
@@ -75,6 +94,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
             holder.fullname.setText("Nombre: " + datas.getFullname());
             holder.email.setText("Correo: " + datas.getEmail());
             holder.code.setText("Código: " + datas.getCode());
+
+            System.out.println("URL: " + datas.getUrl());
+
+            holder.imagen.setImageBitmap(GetImageFromUrl.doInBackground(datas.getUrl()));
 
             //Se Asignan funciones de acción al cardview
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -92,11 +115,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                     if (UtilsNetwork.isOnline(context)) {
 
                         getUser(id, "ACTUALIZAR");
-
                     } else {
                         Toast.makeText(context, "No puedes editar tarjetas sin conexión a internet.", Toast.LENGTH_LONG).show();
-
-
                     }
                 }
             });
@@ -105,28 +125,27 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public void onClick(View view) {
-                    alertDialog(id).show();
+                    deleteDialog(id).show();
                 }
             });
         }
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void filtrado(String txtBuscar){
+    public void filtrado(String txtBuscar) {
         int longitud = txtBuscar.length();
-        if(longitud == 0){
+        if (longitud == 0) {
             getUsers();
-        }else{
+        } else {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 List<Datos> coleccion = data.stream().filter(i -> i.getFullname().toLowerCase()
                         .contains(txtBuscar.toLowerCase())).collect(Collectors.toList());
 
                 data.clear();
                 data.addAll(coleccion);
-            } else{
-                for (Datos d: dataBuscador) {
-                    if(d.getFullname().toLowerCase().contains(txtBuscar.toLowerCase())){
+            } else {
+                for (Datos d : dataBuscador) {
+                    if (d.getFullname().toLowerCase().contains(txtBuscar.toLowerCase())) {
                         data.add(d);
                     }
                 }
@@ -134,7 +153,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
         }
         notifyDataSetChanged();
     }
-
 
     //Retorna la cantidad total de datos que tengamos, si tenemos 1 un usuario retorna 1
     @Override
@@ -146,6 +164,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
     public class MyViewHolderAdapter extends RecyclerView.ViewHolder {
         TextView fullname, email, code;
         ImageButton editboton, deleteboton;
+        ImageView imagen;
 
         public MyViewHolderAdapter(View itemView) {
             super(itemView);
@@ -155,8 +174,41 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
             code = itemView.findViewById(R.id.card_code);
             editboton = itemView.findViewById(R.id.editbutton);
             deleteboton = itemView.findViewById(R.id.deletebutton);
+            imagen = itemView.findViewById(R.id.imageUserGallery);
         }
     }
+
+    //Transformar a bitmap
+    public static class GetImageFromUrl extends AsyncTask<String, Void, Bitmap> {
+
+
+        ImageView imageView;
+
+        public GetImageFromUrl(ImageView img) {
+            this.imageView = img;
+        }
+
+
+        public Bitmap doInBackground(String... url) {
+            String stringUrl = url[0];
+            bitmap = null;
+            InputStream inputStream;
+            try {
+                inputStream = new java.net.URL(stringUrl).openStream();
+                bitmap = BitmapFactory.decodeStream(inputStream);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap){
+            super.onPostExecute(bitmap);
+            imageView.setImageBitmap(bitmap);
+        }
+    }
+
 
     //Get user by id RETROFIT
     public void getUser(String id, String method) {
@@ -259,7 +311,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
     //Ventana emergenete para eliminar un usuario
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public AlertDialog alertDialog(String id) {
+    public AlertDialog deleteDialog(String id) {
 
         if (UtilsNetwork.isOnline(context)) {
             AlertDialog.Builder constructor = new AlertDialog.Builder(context);
@@ -301,5 +353,20 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
 
     }
+
+    /*private Bitmap getImageBitmap(String uri) {
+
+        try {
+            URL url = new URL(uri);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            return BitmapFactory.decodeStream(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }*/
 }
 
