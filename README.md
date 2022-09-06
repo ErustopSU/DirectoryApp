@@ -1,4 +1,4 @@
-# Reto Android | DirectoryApp
+# Reto Android V-1.2 | DirectoryApp
 
 Actualmente este proyecto está en desarrollo
 
@@ -13,7 +13,7 @@ Este proyecto está basado en el curso Android desde cero de la Geekipedia de Er
 
 # Uso
 
-Puedes descargar el proyecto cuando desees
+Puedes descargar el proyecto cuando desees.
 
 
 # Contribuir
