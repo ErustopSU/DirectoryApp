@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--suppress AndroidUnresolvableTag -->
+<?xml version="1.0" encoding="utf-8"?><!--suppress AndroidUnresolvableTag -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -24,13 +23,17 @@
             android:textColor="@color/purple_500"
             android:textSize="24sp"
             android:textStyle="bold" />
-         <SearchView
+
+        <SearchView
             android:id="@+id/txtBuscar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            app:showAsAction="always|collapseActionView"
-            app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+            android:background="@drawable/bg_white_rounded"
+            android:layout_margin="10dp"
+            app:queryBackground="@color/searchview"
+            app:actionViewClass="androidx.appcompat.widget.SearchView"
+            app:showAsAction="ifRoom|collapseActionView" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe"

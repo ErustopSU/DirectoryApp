@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="#F5B041"
+    app:cardBackgroundColor="@color/cardview"
     app:cardCornerRadius="20dp"
     app:cardElevation="10dp"
     app:cardMaxElevation="10dp"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true">
-
+    <!--- F5B041-->
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">

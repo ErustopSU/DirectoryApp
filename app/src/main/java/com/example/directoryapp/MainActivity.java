@@ -81,6 +81,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         });
 
         txtBuscar.setOnQueryTextListener(this);
+        txtBuscar.onActionViewExpanded();
+        txtBuscar.clearFocus();
+        txtBuscar.setQueryHint("Buscar");
+
     }
 
     @Override
