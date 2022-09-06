@@ -5,4 +5,5 @@
     <string name="Eliminarb">Eliminar</string>
     <string name="Cancelar">Cancelar</string>
     <string name="Aceptar">Aceptar</string>
+    <string name="FontPrincipal" translatable="false">sans-serif-condensed-medium</string>
 </resources>

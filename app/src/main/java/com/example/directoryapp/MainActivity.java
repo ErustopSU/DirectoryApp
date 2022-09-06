@@ -19,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     SearchView txtBuscar;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false);
-               sincronizeUsers();
+                sincronizeUsers();
             }
 
         });
@@ -86,12 +87,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public void onResume() {
         super.onResume();
 
-       sincronizeUsers();
+        sincronizeUsers();
     }
 
     private void sincronizeUsers() {
         if (UtilsNetwork.isOnline(this)) {
-            Toast.makeText(this, "Si hay internet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Si hay internet", Toast.LENGTH_SHORT).show();
             getUsers();
             System.out.println(usersRetrofit.size());
             System.out.println("Probandooo");
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             }
 
         } else {
-            Toast.makeText(MainActivity.this, "Cargando datos sin internet", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Cargando datos sin internet", Toast.LENGTH_LONG).show();
 
             getUsersSQLite();
         }

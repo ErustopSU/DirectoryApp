@@ -7,15 +7,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Retrofit;
 
 public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
@@ -23,10 +17,11 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "BASE DE DATOS";
 
     public static final String TUSUARIOS = "TUSUARIOS";
-    private static final String COL_0 = "ID";
+    public static final String COL_0 = "ID";
     private static final String COL_1 = "FULLNAME";
     private static final String COL_2 = "EMAIL";
     private static final String COL_3 = "CODE";
+
 
 
     //Constructor
@@ -203,6 +198,7 @@ public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
         return correcto;
     }
+
 }
 
 
