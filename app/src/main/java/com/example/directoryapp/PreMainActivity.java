@@ -160,6 +160,4 @@ public class PreMainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }

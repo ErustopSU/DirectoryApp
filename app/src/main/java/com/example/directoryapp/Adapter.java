@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,21 +54,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
     private Context context;
     public List<Datos> dataBuscador;
 
-    private ArrayList<ImageView> dataset;
-    private ImageView imagen;
-    static Bitmap bitmap;
-    String urlImage = "https://api.thecatapi.com/v1/images/";
-
-
     //Constructor
     public Adapter(Context context, ArrayList<Datos> data) {
         this.context = context;
         this.data = data;
-
-        dataBuscador = new ArrayList<>();
-        dataBuscador.addAll(data);
-        dataset = new ArrayList<>();
-        new GetImageFromUrl(imagen).execute(urlImage);
     }
 
     //Actualizar los datos
@@ -87,6 +77,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
     @Override
     public void onBindViewHolder(@NonNull Adapter.MyViewHolderAdapter holder, int position) {
         if (data != null && data.size() > 0) {
+            //Para que no de problemas con la red y el como se ejecuta la cantidad de llamadas que vienen con abrir la aplicacion
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
             Datos datas = data.get(position);
 
             String id = data.get(position).getId();
@@ -97,7 +91,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
             System.out.println("URL: " + datas.getUrl());
 
-            holder.imagen.setImageBitmap(GetImageFromUrl.doInBackground(datas.getUrl()));
+            holder.imagen.setImageBitmap(getImageBitmap(datas.getUrl()));
 
             //Se Asignan funciones de acción al cardview
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -177,38 +171,23 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
             imagen = itemView.findViewById(R.id.imageUserGallery);
         }
     }
-
-    //Transformar a bitmap
-    public static class GetImageFromUrl extends AsyncTask<String, Void, Bitmap> {
-
-
-        ImageView imageView;
-
-        public GetImageFromUrl(ImageView img) {
-            this.imageView = img;
+    //Un bitmap es un formato de imagen que permite adaptar la imagen al requerimento que tu app tiene
+    private Bitmap getImageBitmap(String url) {
+        Bitmap bm = null;
+        try {
+            URL aURL = new URL(url);
+            URLConnection conn = aURL.openConnection();
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            bm = BitmapFactory.decodeStream(bis);
+            bis.close();
+            is.close();
+        } catch (IOException e) {
+            Log.e("Image error", "Error getting bitmap", e);
         }
-
-
-        public Bitmap doInBackground(String... url) {
-            String stringUrl = url[0];
-            bitmap = null;
-            InputStream inputStream;
-            try {
-                inputStream = new java.net.URL(stringUrl).openStream();
-                bitmap = BitmapFactory.decodeStream(inputStream);
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap){
-            super.onPostExecute(bitmap);
-            imageView.setImageBitmap(bitmap);
-        }
+        return bm;
     }
-
 
     //Get user by id RETROFIT
     public void getUser(String id, String method) {
