@@ -19,7 +19,7 @@ import retrofit2.http.GET;
 public class RetrofitClient {
     private static String BASE_URL = "https://reto-android.herokuapp.com/api/v1/";
     private static Retrofit retrofit;
-    private static String BASE_URL_GATITOS = "https://api.thecatapi.com/v1/images/";
+    private static String BASE_URL_GATITOS = " https://api.thecatapi.com/v1/images/";
     private static Retrofit retrofit2;
     private static Gson gson;
 
