@@ -1,13 +1,13 @@
 package com.example.directoryapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -16,18 +16,17 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
 
 public class MainActivity2 extends AppCompatActivity {
 
     private TextView tv1;
     private TextInputLayout et1, et2, et3;
     private Button boton1, boton2;
+    private ImageView vistaimagen;
 
     private String id, fullname, email, code, method;
 
@@ -43,6 +42,8 @@ public class MainActivity2 extends AppCompatActivity {
         et3 = findViewById(R.id.cajaet3);
         boton2 = findViewById(R.id.cancelar);
         boton1 = findViewById(R.id.boton1);
+
+        vistaimagen = findViewById(R.id.imageUserGallery2);
 
         id = getIntent().getStringExtra("id");
         fullname = getIntent().getStringExtra("name");
@@ -88,11 +89,17 @@ public class MainActivity2 extends AppCompatActivity {
                 et2.setEnabled(false);
                 et3.setEnabled(false);
 
+                vistaimagen.setVisibility(View.VISIBLE);
+
                 break;
             case "ACTUALIZAR":
+                
+                vistaimagen.setVisibility(View.GONE);
+
                 boton1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
 
                         final String compruebaname = et1.getEditText().getText().toString();
                         final String compruebaemail = et2.getEditText().getText().toString().trim();
@@ -135,6 +142,7 @@ public class MainActivity2 extends AppCompatActivity {
 
                 tv1.setText("CREA UNA TARJETA");
                 boton1.setText("CREAR");
+                vistaimagen.setVisibility(View.GONE);
 
                 boton1.setOnClickListener(new View.OnClickListener() {
                     @Override

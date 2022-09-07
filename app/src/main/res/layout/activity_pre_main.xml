@@ -16,7 +16,7 @@
         android:textAlignment="center"
         android:layout_alignParentTop="true"
         android:text="Bienvenido a DirectoryApp"
-        android:textColor="@color/purple_500"
+        android:textColor="@color/Primario"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -24,7 +24,6 @@
         android:id="@+id/linearlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
->>>>>>> Stashed changes
         android:orientation="vertical">
 
         <!-- Progress bar -->
@@ -47,7 +46,6 @@
         android:layout_height="wrap_content"
         android:text="haz Clic para continuar"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/linearlayout"
-        />
+        android:layout_below="@+id/linearlayout" />
 
 </RelativeLayout>

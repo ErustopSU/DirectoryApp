@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CEF1F9"
+    android:background="@color/FondoPrincipal"
 
     tools:context=".MainActivity">
 
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:padding="30dp"
             android:text="@string/tv1"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/Primario"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -62,7 +62,8 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
-        app:srcCompat="@drawable/ic_baseline_add_30" />
+        app:srcCompat="@drawable/ic_baseline_add_30"
+        app:backgroundTint="@color/purple_200" />
 
 
 </RelativeLayout>

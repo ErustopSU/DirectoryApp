@@ -1,9 +1,8 @@
 package com.example.directoryapp;
 
 
-import android.widget.ImageView;
-
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -38,7 +37,7 @@ public interface UsersInterface {
     @DELETE ("users/delete/{id}")
     Call<User> deleteUser(@Path("id") String id);
 
-    @GET("search?limit=10&breed_ids=beng&api_key=live_OpXv3IKTw1SebnMhH1y3XdOay0AVAc2wIxzi7TrMZOUuB43kIvnLSKh2xJPoMYoa")
+    @GET("search")
     Call<List<ImageCats>> getImageCats();
 
 }

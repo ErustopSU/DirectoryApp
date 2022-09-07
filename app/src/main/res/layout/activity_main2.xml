@@ -2,48 +2,57 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#CEF1F9"
-    android:padding="30dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/FondoPrincipal"
+    android:paddingStart="30dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="30dp"
+
     tools:context=".MainActivity2">
 
-
-
-    <TextView
-        android:id="@+id/txtv1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:padding="15dp"
-        android:text="Create / Update"
-        android:textColor="@color/purple_500"
-        android:textSize="30sp"
-        android:textStyle="bold">
-
-    </TextView>
 
     <LinearLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_marginBottom="70dp"
         android:orientation="vertical"
-        android:layout_below="@+id/txtv1">
+        android:gravity="center">
+
+
+        <TextView
+            android:id="@+id/txtv1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_marginBottom="45dp"
+            android:text="Create / Update"
+            android:textAlignment="center"
+            android:textColor="@color/Primario"
+            android:textSize="30sp"
+            android:textStyle="bold">
+
+        </TextView>
+
+        <ImageView
+            android:id="@+id/imageUserGallery2"
+            android:layout_width="200dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:background="@color/Primario"
+            android:visibility="invisible" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/cajaet1"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:hint="Ingresa tu nombre"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:startIconDrawable="@drawable/ic_person"
             app:helperTextTextColor="@color/rojo"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            app:endIconMode="clear_text">
+            app:startIconDrawable="@drawable/ic_person">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/name"
@@ -54,17 +63,16 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/cajaet2"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
             android:hint="Ingresa tu correo"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:startIconDrawable="@drawable/ic_email"
+            app:endIconMode="clear_text"
             app:helperTextTextColor="@color/rojo"
-            android:layout_marginBottom="10dp"
-            app:endIconMode="clear_text">
+            app:startIconDrawable="@drawable/ic_email">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email"
@@ -76,16 +84,16 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/cajaet3"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
             android:hint="Ingresa tu código"
-            android:layout_marginBottom="10dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:startIconDrawable="@drawable/ic_code"
-            app:helperTextTextColor="@color/rojo"
             app:counterEnabled="true"
             app:counterMaxLength="5"
-            app:endIconMode="clear_text">
+            app:endIconMode="clear_text"
+            app:helperTextTextColor="@color/rojo"
+            app:startIconDrawable="@drawable/ic_code">
 
 
             <com.google.android.material.textfield.TextInputEditText
@@ -96,18 +104,17 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/cancelar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="20dp"
                 android:text="Cancelar">
 
             </Button>
@@ -116,12 +123,10 @@
                 android:id="@+id/boton1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="20dp"
                 android:text="Cre / Up"
                 android:visibility="visible">
 
             </Button>
-
         </LinearLayout>
 
     </LinearLayout>
