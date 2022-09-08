@@ -22,8 +22,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -32,7 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
+
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -44,7 +42,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import static android.provider.CalendarContract.CalendarCache.URI;
+
 import static com.example.directoryapp.PreMainActivity.getUsers;
 
 
@@ -181,6 +179,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
             InputStream is = conn.getInputStream();
             BufferedInputStream bis = new BufferedInputStream(is);
             bm = BitmapFactory.decodeStream(bis);
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bm, 150, 150, false);
             bis.close();
             is.close();
         } catch (IOException e) {
