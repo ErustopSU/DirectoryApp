@@ -90,6 +90,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
             System.out.println("URL: " + datas.getUrl());
 
             holder.imagen.setImageBitmap(getImageBitmap(datas.getUrl()));
+            //holder.vistaimagen.setImageBitmap(getImageBitmap(datas.getUrl()));
 
             //Se Asignan funciones de acción al cardview
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +157,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
     public class MyViewHolderAdapter extends RecyclerView.ViewHolder {
         TextView fullname, email, code;
         ImageButton editboton, deleteboton;
-        ImageView imagen;
+        ImageView imagen, vistaimagen;
 
         public MyViewHolderAdapter(View itemView) {
             super(itemView);
@@ -167,11 +168,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
             editboton = itemView.findViewById(R.id.editbutton);
             deleteboton = itemView.findViewById(R.id.deletebutton);
             imagen = itemView.findViewById(R.id.imageUserGallery);
+            //vistaimagen = itemView.findViewById(R.id.imageUserGallery2);
+
         }
     }
     //Un bitmap es un formato de imagen que permite adaptar la imagen al requerimento que tu app tiene
     private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
+        Bitmap resizedBitmap = null;
         try {
             URL aURL = new URL(url);
             URLConnection conn = aURL.openConnection();
@@ -179,13 +183,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
             InputStream is = conn.getInputStream();
             BufferedInputStream bis = new BufferedInputStream(is);
             bm = BitmapFactory.decodeStream(bis);
-            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bm, 150, 150, false);
+            resizedBitmap = bm.createScaledBitmap(bm, 250, 250, false);
             bis.close();
             is.close();
         } catch (IOException e) {
             Log.e("Image error", "Error getting bitmap", e);
         }
-        return bm;
+        return resizedBitmap;
     }
 
     //Get user by id RETROFIT

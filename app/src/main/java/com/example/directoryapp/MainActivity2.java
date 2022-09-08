@@ -15,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +29,7 @@ public class MainActivity2 extends AppCompatActivity {
     private TextInputLayout et1, et2, et3;
     private Button boton1, boton2;
     private ImageView vistaimagen;
+    private List<ImageCats> catitos = new ArrayList<>();
 
     private String id, fullname, email, code, method;
 
@@ -93,7 +96,7 @@ public class MainActivity2 extends AppCompatActivity {
 
                 break;
             case "ACTUALIZAR":
-                
+
                 vistaimagen.setVisibility(View.GONE);
 
                 boton1.setOnClickListener(new View.OnClickListener() {

@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 
 public class AdminSQLiteOpenHelper extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
     private static final String DB_NAME = "BASE DE DATOS";
 
     public static final String TUSUARIOS = "TUSUARIOS";

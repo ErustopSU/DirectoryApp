@@ -24,9 +24,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private static Adapter adapter;
-    //private ImageView imagen;
-    //static Bitmap bitmap;
-    //String urlImage = "https://api.thecatapi.com/v1/images/";
+
 
 
     public static String _id;
