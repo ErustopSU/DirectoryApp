@@ -1,6 +1,9 @@
 package com.example.directoryapp;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,7 +17,11 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +39,7 @@ public class MainActivity2 extends AppCompatActivity {
     private List<ImageCats> catitos = new ArrayList<>();
 
     private String id, fullname, email, code, method;
+    private int position;
 
 
     @Override
@@ -39,6 +47,7 @@ public class MainActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
+        //Conexion de la parte logica con la grafica
         tv1 = findViewById(R.id.txtv1);
         et1 = findViewById(R.id.cajaet1);
         et2 = findViewById(R.id.cajaet2);
@@ -48,17 +57,20 @@ public class MainActivity2 extends AppCompatActivity {
 
         vistaimagen = findViewById(R.id.imageUserGallery2);
 
+        // Load data to intent
         id = getIntent().getStringExtra("id");
         fullname = getIntent().getStringExtra("name");
         email = getIntent().getStringExtra("email");
         code = getIntent().getStringExtra("code");
         method = getIntent().getStringExtra("method");
+        position  = getIntent().getIntExtra("position", 0);
 
+        //Set data
         et1.getEditText().setText(fullname);
         et2.getEditText().setText(email);
         et3.getEditText().setText(code);
 
-
+        //Set title and text button
         tv1.setText(method);
         boton1.setText(method);
 
@@ -89,6 +101,7 @@ public class MainActivity2 extends AppCompatActivity {
                 et3.setEnabled(false);
 
                 vistaimagen.setVisibility(View.VISIBLE);
+                vistaimagen.setImageBitmap(getImageBitmap(PreMainActivity.catitos.get(position).getUrl()));
 
                 break;
             case "ACTUALIZAR":
@@ -184,6 +197,30 @@ public class MainActivity2 extends AppCompatActivity {
         });
     }
 
+    //Un bitmap es un formato de imagen que permite adaptar la imagen al requerimento que tu app tiene
+    private Bitmap getImageBitmap(String url) {
+        Bitmap bm = null;
+        Bitmap resizedBitmap = null;
+        try {
+            URL aURL = new URL(url);
+            URLConnection conn = aURL.openConnection();
+            conn.connect();
+
+            InputStream is = conn.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+
+            bm = BitmapFactory.decodeStream(bis);
+            resizedBitmap = bm.createScaledBitmap(bm, 250, 270, false);
+
+            bis.close();
+            is.close();
+
+            return resizedBitmap;
+        } catch (IOException e) {
+            Log.e("Image error", "Error getting bitmap", e);
+            return null;
+        }
+    }
 
     public User retrieveUser() {
         User user = new User();

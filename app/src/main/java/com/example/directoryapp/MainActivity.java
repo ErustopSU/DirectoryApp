@@ -7,15 +7,15 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private static Adapter adapter;
-
 
 
     public static String _id;
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private List<User> usersSQLite = new ArrayList<>();
     private List<User> usersRetrofit = new ArrayList();
     private List<ImageCats> catitos = new ArrayList<>();
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         usersSQLite = PreMainActivity.usersSQLite;
         usersRetrofit = PreMainActivity.usersRetrofit;
         catitos = PreMainActivity.catitos;
-        //new GetImageFromUrl(imagen).execute(urlImage);
 
         setRecyclerView();
         sincronizeUsers();
@@ -92,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         txtBuscar.clearFocus();
         txtBuscar.setQueryHint("Buscar");
     }
-    
 
     @Override
     public void onResume() {
@@ -100,14 +96,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         sincronizeUsers();
 
-        PreMainActivity.getUsers();
-        PreMainActivity.getUsersSQLite();
+        /* PreMainActivity.getUsers();
+        PreMainActivity.getUsersSqlite();
         PreMainActivity.getCatitos();
 
         //Load data
         usersSQLite = PreMainActivity.usersSQLite;
         usersRetrofit = PreMainActivity.usersRetrofit;
-        catitos = PreMainActivity.catitos;
+        catitos = PreMainActivity.catitos;*/
     }
 
     private void sincronizeUsers() {
@@ -156,6 +152,20 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         adapter = new Adapter(MainActivity.this, new ArrayList<>());
         recyclerView.setAdapter(adapter);
     }
+
+    //Metodo para que al poblar las tarjetas se le asigne una imagen diferente a cada cardview
+    /*public static void catitosCards(List<ImageCats> imageCats){
+        List<ImageCats> imageCatitos = new ArrayList<>();
+
+        for (ImageCats image: imageCats) {
+            imageCatitos.add(new ImageCats(
+                                image.getUrl(),
+
+
+            ));
+
+        }
+    }*/
 
     //Poblamos la data en las tarjetas mediante el adapter
     public static void populateUsers(List<User> usersList, List<ImageCats> imageCats) {

@@ -1,6 +1,8 @@
 package com.example.directoryapp;
 
 
+import static com.example.directoryapp.PreMainActivity.getUsers;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +27,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -39,17 +39,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
-import static com.example.directoryapp.PreMainActivity.catitos;
-import static com.example.directoryapp.PreMainActivity.getUsers;
-
-
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
     public List<Datos> data;
     private Context context;
     public List<Datos> dataBuscador;
-    public List<ImageCats> imageCats;
-
 
     //Constructor
     public Adapter(Context context, ArrayList<Datos> data) {
@@ -72,54 +66,47 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
     //Asignar los datos y asignar funciones a los metodos en el caso de que sea necesario
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolderAdapter holder, int position) {
+    public void onBindViewHolder(@NonNull Adapter.MyViewHolderAdapter holder, int position) {
         if (data != null && data.size() > 0) {
             //Para que no de problemas con la red y el como se ejecuta la cantidad de llamadas que vienen con abrir la aplicacion
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
 
             Datos datas = data.get(position);
-            String id = data.get(position).getId();
-            //Nos traemos los datos de las imagenes
-            String url = data.get(position).getUrl();
 
-            holder.fullname.setText("Nombre: " + datas.getFullname());
-            holder.email.setText("Correo: " + datas.getEmail());
-            holder.code.setText("Código: " + datas.getCode());
+            String id = data.get(position).getId();
+
+            holder.fullname.setText(datas.getFullname());
+            holder.email.setText(datas.getEmail());
+            holder.code.setText(datas.getCode());
 
             System.out.println("URL: " + datas.getUrl());
 
-            holder.vistaimagen.setVisibility(View.VISIBLE);
+            Bitmap resized = Bitmap.createScaledBitmap(getImageBitmap(datas.getUrl()), 50, 50, false);
 
-            holder.imagen.setImageBitmap(getImageBitmap(datas.getUrl()));
+            holder.imagen.setImageBitmap(resized);
 
-            //holder.vistaimagen.setImageBitmap(getImageBitmap(datas.getUrl()));
-
-
-            //Se Asignan funciones de acción al cardview
+            //GET
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    getUser(id, "OBTENER", url);
-                    getImageGatitosActivity2();
+                    getUser(id, "OBTENER", position);
                 }
             });
 
+            //UPDATE
             holder.editboton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     if (UtilsNetwork.isOnline(context)) {
-
-                        getUser(id, "ACTUALIZAR", url);
-                        getImageGatitosActivity2();
+                        getUser(id, "ACTUALIZAR", position);
                     } else {
                         Toast.makeText(context, "No puedes editar tarjetas sin conexión a internet.", Toast.LENGTH_LONG).show();
                     }
                 }
             });
 
+            //DELETE
             holder.deleteboton.setOnClickListener(new View.OnClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                 @Override
@@ -174,94 +161,35 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
             editboton = itemView.findViewById(R.id.editbutton);
             deleteboton = itemView.findViewById(R.id.deletebutton);
             imagen = itemView.findViewById(R.id.imageUserGallery);
-            vistaimagen = itemView.findViewById(R.id.imageUserGallery2);
+            //vistaimagen = itemView.findViewById(R.id.imageUserGallery2);
 
         }
     }
 
     //Un bitmap es un formato de imagen que permite adaptar la imagen al requerimento que tu app tiene
     private Bitmap getImageBitmap(String url) {
-        Bitmap bm = null;
-        Bitmap resizedBitmap = null;
         try {
             URL aURL = new URL(url);
             URLConnection conn = aURL.openConnection();
             conn.connect();
-            InputStream is = conn.getInputStream();
-            BufferedInputStream bis = new BufferedInputStream(is);
-            bm = BitmapFactory.decodeStream(bis);
-            resizedBitmap = bm.createScaledBitmap(bm, 250, 250, false);
-            bis.close();
-            is.close();
+
+            InputStream inputStream = conn.getInputStream();
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+
+            Bitmap bitmap = BitmapFactory.decodeStream(bufferedInputStream);
+
+            bufferedInputStream.close();
+            bufferedInputStream.close();
+
+            return bitmap;
         } catch (IOException e) {
             Log.e("Image error", "Error getting bitmap", e);
+            return null;
         }
-        return resizedBitmap;
-    }
-
-    public void getImageGatitosActivity2(){
-
-
-        Retrofit retrofit2 = RetrofitClient.getRetrofitClient2();
-
-        Call<List<ImageCats>> getImageGatitosActivity2 = retrofit2.create(UsersInterface.class).getImageCats();
-
-        getImageGatitosActivity2.enqueue(new Callback<List<ImageCats>>() {
-            @Override
-            public void onResponse(Call<List<ImageCats>> call, Response<List<ImageCats>> response) {
-                if (!response.isSuccessful()) {
-
-                    switch (response.code()) {
-
-                        case 404:
-                            System.out.println("Error 404" + response.body());
-                            break;
-                        case 500:
-                            System.out.println("Error 500 " + response.body());
-
-                            break;
-                        default:
-                            System.out.println("Error " + response.body());
-
-                    }
-
-                } else {
-
-                    catitos = response.body();
-
-                    String id = ImageCats.getId();
-
-                    String url = ImageCats.getUrl();
-                    String width = String.valueOf(ImageCats.getWidth());
-                    String height = String.valueOf(ImageCats.getHeight());
-
-
-                    Intent intent = new Intent(context, MainActivity2.class);
-
-                    intent.putExtra("id", id);
-                    intent.putExtra("url", url);
-                    intent.putExtra("width", width);
-                    intent.putExtra("height", height);
-                    //intent.putExtra("url", url);
-
-
-
-
-                    context.startActivity(intent);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<List<ImageCats>> call, Throwable t) {
-
-            }
-        });
     }
 
     //Get user by id RETROFIT
-    public void getUser(String id, String method, String url) {
-        //Datos datas = data.get(Integer.parseInt(url));
+    public void getUser(String id, String method, int position) {
 
         Retrofit retrofit = RetrofitClient.getRetrofitClient();
 
@@ -293,7 +221,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                     String name = user.getFullname();
                     String email = user.getEmail();
                     String code = String.valueOf(user.getCode());
-                    //String url = datas.getUrl();
 
                     Intent intent = new Intent(context, MainActivity2.class);
 
@@ -301,10 +228,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                     intent.putExtra("name", name);
                     intent.putExtra("email", email);
                     intent.putExtra("code", code);
-                    //intent.putExtra("url", url);
                     intent.putExtra("method", method);
-
-
+                    intent.putExtra("position", position);
 
                     context.startActivity(intent);
                 }
@@ -408,5 +333,19 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
     }
 
+    /*private Bitmap getImageBitmap(String uri) {
+
+        try {
+            URL url = new URL(uri);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            return BitmapFactory.decodeStream(input);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }*/
 }
 
