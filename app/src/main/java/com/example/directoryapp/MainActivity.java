@@ -7,15 +7,15 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private List<User> usersRetrofit = new ArrayList();
     private List<ImageCats> catitos = new ArrayList<>();
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         swipeRefreshLayout = findViewById(R.id.swipe);
         recyclerView = findViewById(R.id.recyclerview);
         boton1 = findViewById(R.id.floatingActionButton);
+
 
         //Load data
         usersSQLite = PreMainActivity.usersSQLite;
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private void cargarWebServiceImagen() {
 
         String url = "https://api.thecatapi.com/v1/images/search";
-        imagen = findViewById(mageUserGallery);
+        imagen = findViewById(R.id.imageUserGallery);
         //new URL(gatos.getUrl());
 
         ImageRequest imageRequest = new ImageRequest(url, new com.android.volley.Response.Listener<Bitmap>() {
@@ -125,6 +127,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         super.onResume();
 
         sincronizeUsers();
+
+        /* PreMainActivity.getUsers();
+        PreMainActivity.getUsersSqlite();
+        PreMainActivity.getCatitos();
+
+        //Load data
+        usersSQLite = PreMainActivity.usersSQLite;
+        usersRetrofit = PreMainActivity.usersRetrofit;
+        catitos = PreMainActivity.catitos;*/
     }
 
     private void sincronizeUsers() {
@@ -174,6 +185,20 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         recyclerView.setAdapter(adapter);
     }
 
+    //Metodo para que al poblar las tarjetas se le asigne una imagen diferente a cada cardview
+    /*public static void catitosCards(List<ImageCats> imageCats){
+        List<ImageCats> imageCatitos = new ArrayList<>();
+
+        for (ImageCats image: imageCats) {
+            imageCatitos.add(new ImageCats(
+                                image.getUrl(),
+
+
+            ));
+
+        }
+    }*/
+
     //Poblamos la data en las tarjetas mediante el adapter
     public static void populateUsers(List<User> usersList, List<ImageCats> imageCats) {
         List<Datos> data = new ArrayList<>();
@@ -185,8 +210,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     user.getFullname(),
                     user.getEmail(),
                     String.valueOf(user.getCode()),
-                    imageCats.get(0).getUrl()
+                    null
             ));
+        }
+
+        for (int i = 0; i < data.size(); i++) {
+            data.get(i).setUrl(imageCats.get(i).getUrl());
         }
 
         adapter.update(data);

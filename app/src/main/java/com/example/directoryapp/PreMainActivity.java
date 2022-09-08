@@ -136,7 +136,7 @@ public class PreMainActivity extends AppCompatActivity {
     }
 
     //Method get list cats
-    private void getCatitos() {
+    public static void getCatitos() {
         Retrofit retrofit = RetrofitClient.getRetrofitClient2();
 
         Call<List<ImageCats>> call = retrofit.create(UsersInterface.class).getImageCats();
@@ -145,7 +145,7 @@ public class PreMainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<ImageCats>> call, Response<List<ImageCats>> response) {
                 if (!response.isSuccessful()) {
-                    Toast.makeText(PreMainActivity.this, "Error: " + response.errorBody(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Error: " + response.errorBody(), Toast.LENGTH_SHORT).show();
                 } else {
                     catitos = response.body();
 
@@ -155,7 +155,7 @@ public class PreMainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<ImageCats>> call, Throwable t) {
-                Toast.makeText(PreMainActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 System.out.println("Error: " + t.getMessage());
             }
         });
