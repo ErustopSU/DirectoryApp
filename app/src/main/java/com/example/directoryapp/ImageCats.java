@@ -5,19 +5,19 @@ import com.google.gson.annotations.SerializedName;
 
 public class ImageCats {
     @SerializedName("id")
-    private String id;
+    private static String id;
 
     @SerializedName("url")
-    private String url;
+    private static String url;
 
     @SerializedName("width")
-    private int width;
+    private static int width;
 
     @SerializedName("height")
-    private int height;
+    private static int height;
 
     //Metodos Getter y Setter
-    public String getId() {
+    public static String getId() {
         return id;
     }
 
@@ -25,7 +25,7 @@ public class ImageCats {
         this.id = id;
     }
 
-    public String getUrl() {
+    public static String getUrl() {
         return url;
     }
 
@@ -33,7 +33,7 @@ public class ImageCats {
         this.url = url;
     }
 
-    public int getWidth() {
+    public static int getWidth() {
         return width;
     }
 
@@ -41,7 +41,7 @@ public class ImageCats {
         this.width = width;
     }
 
-    public int getHeight() {
+    public static int getHeight() {
         return height;
     }
 

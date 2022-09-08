@@ -67,11 +67,7 @@ public class MainActivity2 extends AppCompatActivity {
                 boton1.setVisibility(View.GONE);
                 tv1.setText("VISTA DE LA TARJETA");
 
-                /*try {
-                    GatosService.verGatos();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
+                vistaimagen.findViewById(R.id.imageUserGallery2);
 
                 boton2.setText("REGRESAR");
 
@@ -195,6 +191,7 @@ public class MainActivity2 extends AppCompatActivity {
         user.setFullname(et1.getEditText().getText().toString());
         user.setEmail(et2.getEditText().getText().toString());
         user.setCode(Integer.parseInt(et3.getEditText().getText().toString()));
+
 
         return user;
 

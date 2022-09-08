@@ -92,33 +92,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         txtBuscar.clearFocus();
         txtBuscar.setQueryHint("Buscar");
     }
-
-    //Metodo para traernos las imagenes de la api y setearlas en el contenedor hacia la vista
-    /*
-    private void cargarWebServiceImagen() {
-
-        String url = "https://api.thecatapi.com/v1/images/search";
-        imagen = findViewById(R.id.imageUserGallery);
-        //new URL(gatos.getUrl());
-
-        ImageRequest imageRequest = new ImageRequest(url, new com.android.volley.Response.Listener<Bitmap>() {
-            @Override
-            public void onResponse(Bitmap response) {
-                System.out.println("Imagenes de gatitos");
-                imagen.setImageBitmap(response);
-                //Uri path = imagenRequest.getUrl();
-                //imagen.setImageURI(Uri.parse(url));
-            }
-        }, 15, 15, ImageView.ScaleType.CENTER, null, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("Error: " + error.getMessage());
-                Toast.makeText(MainActivity.this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
-            }
-        });
-        request.add(imageRequest);
-    }
-    */
+    
 
     @Override
     public void onResume() {
@@ -126,14 +100,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         sincronizeUsers();
 
-        /* PreMainActivity.getUsers();
-        PreMainActivity.getUsersSqlite();
+        PreMainActivity.getUsers();
+        PreMainActivity.getUsersSQLite();
         PreMainActivity.getCatitos();
 
         //Load data
         usersSQLite = PreMainActivity.usersSQLite;
         usersRetrofit = PreMainActivity.usersRetrofit;
-        catitos = PreMainActivity.catitos;*/
+        catitos = PreMainActivity.catitos;
     }
 
     private void sincronizeUsers() {
@@ -182,20 +156,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         adapter = new Adapter(MainActivity.this, new ArrayList<>());
         recyclerView.setAdapter(adapter);
     }
-
-    //Metodo para que al poblar las tarjetas se le asigne una imagen diferente a cada cardview
-    /*public static void catitosCards(List<ImageCats> imageCats){
-        List<ImageCats> imageCatitos = new ArrayList<>();
-
-        for (ImageCats image: imageCats) {
-            imageCatitos.add(new ImageCats(
-                                image.getUrl(),
-
-
-            ));
-
-        }
-    }*/
 
     //Poblamos la data en las tarjetas mediante el adapter
     public static void populateUsers(List<User> usersList, List<ImageCats> imageCats) {
