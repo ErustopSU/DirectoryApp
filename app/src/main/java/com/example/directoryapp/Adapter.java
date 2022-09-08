@@ -1,18 +1,16 @@
 package com.example.directoryapp;
 
 
+import static com.example.directoryapp.PreMainActivity.getUsers;
+
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.StrictMode;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,7 +27,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -41,9 +37,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-
-import static com.example.directoryapp.PreMainActivity.getUsers;
 
 
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
@@ -83,9 +76,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
             String id = data.get(position).getId();
 
-            holder.fullname.setText("Nombre: " + datas.getFullname());
-            holder.email.setText("Correo: " + datas.getEmail());
-            holder.code.setText("Código: " + datas.getCode());
+            holder.fullname.setText(datas.getFullname());
+            holder.email.setText(datas.getEmail());
+            holder.code.setText(datas.getCode());
 
             System.out.println("URL: " + datas.getUrl());
 
@@ -183,7 +176,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
             InputStream is = conn.getInputStream();
             BufferedInputStream bis = new BufferedInputStream(is);
             bm = BitmapFactory.decodeStream(bis);
-            resizedBitmap = bm.createScaledBitmap(bm, 250, 250, false);
+            resizedBitmap = bm.createScaledBitmap(bm, 250, 270, false);
+            resizedBitmap.
             bis.close();
             is.close();
         } catch (IOException e) {

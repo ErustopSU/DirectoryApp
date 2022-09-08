@@ -7,15 +7,15 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
@@ -93,32 +93,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         txtBuscar.setQueryHint("Buscar");
     }
 
-    //Metodo para traernos las imagenes de la api y setearlas en el contenedor hacia la vista
-    /*
-    private void cargarWebServiceImagen() {
 
-        String url = "https://api.thecatapi.com/v1/images/search";
-        imagen = findViewById(R.id.imageUserGallery);
-        //new URL(gatos.getUrl());
-
-        ImageRequest imageRequest = new ImageRequest(url, new com.android.volley.Response.Listener<Bitmap>() {
-            @Override
-            public void onResponse(Bitmap response) {
-                System.out.println("Imagenes de gatitos");
-                imagen.setImageBitmap(response);
-                //Uri path = imagenRequest.getUrl();
-                //imagen.setImageURI(Uri.parse(url));
-            }
-        }, 15, 15, ImageView.ScaleType.CENTER, null, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("Error: " + error.getMessage());
-                Toast.makeText(MainActivity.this, "Error al cargar la imagen", Toast.LENGTH_SHORT).show();
-            }
-        });
-        request.add(imageRequest);
-    }
-    */
 
     @Override
     public void onResume() {
