@@ -36,7 +36,7 @@ public class MainActivity2 extends AppCompatActivity {
     private TextInputLayout et1, et2, et3;
     private Button boton1, boton2;
     private ImageView vistaimagen;
-    private List<ImageCats> catitos = new ArrayList<>();
+
 
     private String id, fullname, email, code, method;
     private int position;

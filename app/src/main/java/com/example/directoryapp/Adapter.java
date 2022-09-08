@@ -161,7 +161,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
             editboton = itemView.findViewById(R.id.editbutton);
             deleteboton = itemView.findViewById(R.id.deletebutton);
             imagen = itemView.findViewById(R.id.imageUserGallery);
-            //vistaimagen = itemView.findViewById(R.id.imageUserGallery2);
 
         }
     }
@@ -332,20 +331,5 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
 
     }
-
-    /*private Bitmap getImageBitmap(String uri) {
-
-        try {
-            URL url = new URL(uri);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            return BitmapFactory.decodeStream(input);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }*/
 }
 
