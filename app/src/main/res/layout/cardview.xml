@@ -15,16 +15,12 @@
         android:layout_height="wrap_content">
 
 
-
-       <ImageView
+        <ImageView
             android:id="@+id/imageUserGallery"
             android:layout_width="90dp"
             android:layout_height="100dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/bg_white_rounded"
-           co/>
-
+            android:layout_marginTop="15dp" />
 
 
         <LinearLayout
@@ -89,8 +85,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:text="Correo"
-                android:textSize="14sp"
                 android:textColor="@color/Primario_Variante"
+                android:textSize="14sp"
                 android:textStyle="bold">
 
             </TextView>

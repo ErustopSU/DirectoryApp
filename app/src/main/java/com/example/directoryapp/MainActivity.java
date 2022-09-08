@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private static Adapter adapter;
 
 
-
     public static String _id;
     private String fullname;
     private String email;
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private List<User> usersSQLite = new ArrayList<>();
     private List<User> usersRetrofit = new ArrayList();
     private List<ImageCats> catitos = new ArrayList<>();
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         usersSQLite = PreMainActivity.usersSQLite;
         usersRetrofit = PreMainActivity.usersRetrofit;
         catitos = PreMainActivity.catitos;
-        //new GetImageFromUrl(imagen).execute(urlImage);
 
         setRecyclerView();
         sincronizeUsers();
@@ -92,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         txtBuscar.clearFocus();
         txtBuscar.setQueryHint("Buscar");
     }
-
-
 
     @Override
     public void onResume() {

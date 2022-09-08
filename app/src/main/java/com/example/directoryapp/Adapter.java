@@ -82,31 +82,31 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
             System.out.println("URL: " + datas.getUrl());
 
-            holder.imagen.setImageBitmap(getImageBitmap(datas.getUrl()));
-            //holder.vistaimagen.setImageBitmap(getImageBitmap(datas.getUrl()));
+            Bitmap resized = Bitmap.createScaledBitmap(getImageBitmap(datas.getUrl()), 50, 50, false);
 
-            //Se Asignan funciones de acción al cardview
+            holder.imagen.setImageBitmap(resized);
+
+            //GET
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    getUser(id, "OBTENER");
+                    getUser(id, "OBTENER", position);
                 }
             });
 
+            //UPDATE
             holder.editboton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     if (UtilsNetwork.isOnline(context)) {
-
-                        getUser(id, "ACTUALIZAR");
+                        getUser(id, "ACTUALIZAR", position);
                     } else {
                         Toast.makeText(context, "No puedes editar tarjetas sin conexión a internet.", Toast.LENGTH_LONG).show();
                     }
                 }
             });
 
+            //DELETE
             holder.deleteboton.setOnClickListener(new View.OnClickListener() {
                 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                 @Override
@@ -165,29 +165,31 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
         }
     }
+
     //Un bitmap es un formato de imagen que permite adaptar la imagen al requerimento que tu app tiene
     private Bitmap getImageBitmap(String url) {
-        Bitmap bm = null;
-        Bitmap resizedBitmap = null;
         try {
             URL aURL = new URL(url);
             URLConnection conn = aURL.openConnection();
             conn.connect();
-            InputStream is = conn.getInputStream();
-            BufferedInputStream bis = new BufferedInputStream(is);
-            bm = BitmapFactory.decodeStream(bis);
-            resizedBitmap = bm.createScaledBitmap(bm, 250, 270, false);
-            resizedBitmap.
-            bis.close();
-            is.close();
+
+            InputStream inputStream = conn.getInputStream();
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+
+            Bitmap bitmap = BitmapFactory.decodeStream(bufferedInputStream);
+
+            bufferedInputStream.close();
+            bufferedInputStream.close();
+
+            return bitmap;
         } catch (IOException e) {
             Log.e("Image error", "Error getting bitmap", e);
+            return null;
         }
-        return resizedBitmap;
     }
 
     //Get user by id RETROFIT
-    public void getUser(String id, String method) {
+    public void getUser(String id, String method, int position) {
 
         Retrofit retrofit = RetrofitClient.getRetrofitClient();
 
@@ -227,6 +229,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                     intent.putExtra("email", email);
                     intent.putExtra("code", code);
                     intent.putExtra("method", method);
+                    intent.putExtra("position", position);
 
                     context.startActivity(intent);
                 }
