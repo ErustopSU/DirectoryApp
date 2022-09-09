@@ -17,12 +17,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.http.Query;
-
-import static android.view.View.GONE;
-import static com.example.directoryapp.MainActivity.limit;
-import static com.example.directoryapp.MainActivity.page;
-import static com.example.directoryapp.MainActivity.progressBar;
 
 public class PreMainActivity extends AppCompatActivity {
 
@@ -52,7 +46,7 @@ public class PreMainActivity extends AppCompatActivity {
 
         //Load data
         getUsersSQLite();
-        getUsers(page, limit);
+        getUsers();
         getCatitos();
     }
 
@@ -96,12 +90,12 @@ public class PreMainActivity extends AppCompatActivity {
     }
 
     //metodo getUsers con Retrofit
-    public static void getUsers(int page, int limit) {
+    public static void getUsers() {
         //Crear conexion al API
         Retrofit retrofit = RetrofitClient.getRetrofitClient();
 
         //Creando la llamada al endpoint del api correspondiente
-        Call<List<User>> call = retrofit.create(UsersInterface.class).listaUsers(page, limit);
+        Call<List<User>> call = retrofit.create(UsersInterface.class).listaUsers();
 
         //Ejecutamos la llamada
         call.enqueue(new Callback<List<User>>() {

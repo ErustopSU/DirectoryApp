@@ -27,21 +27,20 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private static Adapter adapter;
-    private NestedScrollView nestedScrollView;
     public static ProgressBar progressBar;
-    public static int page = 1, limit = 10;
-
 
     public static String _id;
     private String fullname;
     private String email;
     private String code;
 
-
+    //Data
     private List<User> usersSQLite = new ArrayList<>();
     private List<User> usersRetrofit = new ArrayList();
     private List<ImageCats> catitos = new ArrayList<>();
 
+    //Pagination
+    public static int page = 1, limit = 10;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,9 +50,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         swipeRefreshLayout = findViewById(R.id.swipe);
         recyclerView = findViewById(R.id.recyclerview);
         boton1 = findViewById(R.id.floatingActionButton);
-        nestedScrollView = findViewById(R.id.scrollView);
         progressBar = findViewById(R.id.progress_bar);
-
 
 
         //Load data
@@ -98,23 +95,29 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         txtBuscar.clearFocus();
         txtBuscar.setQueryHint("Buscar");
 
-        PreMainActivity.getUsers(page, limit);
+        //PreMainActivity.getUsers(page, limit);
 
+        /*
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if(scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
                     //when reach last item position
+
                     //Increase page size
                     page++;
+
                     //show progress bar
                     progressBar.setVisibility(View.VISIBLE);
+
                     //call method
                     PreMainActivity.getUsers(page, limit);
+
                     System.out.println("Se esta ejecutando la paginacion");
                 }
             }
         });
+        */
     }
 
     @Override
@@ -132,9 +135,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         usersRetrofit = PreMainActivity.usersRetrofit;
         catitos = PreMainActivity.catitos;*/
     }
-
-
-
 
     private void sincronizeUsers() {
         if (UtilsNetwork.isOnline(this)) {

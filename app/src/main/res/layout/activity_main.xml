@@ -8,6 +8,13 @@
 
     tools:context=".MainActivity">
 
+    <!-- Progress bar -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,6 +22,7 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <!-- Tiitle -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,48 +32,37 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
+        <!-- Buscador -->
         <SearchView
             android:id="@+id/txtBuscar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/bg_white_rounded"
-            android:layout_margin="10dp"
-            app:queryBackground="@color/searchview"
             app:actionViewClass="androidx.appcompat.widget.SearchView"
+            app:queryBackground="@color/searchview"
             app:showAsAction="ifRoom|collapseActionView" />
 
+        <!-- Refresh -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="60dp">
+            android:layout_marginBottom="75dp">
 
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/scrollView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    tools:listitem="@layout/cardview"/>
-
-
-            </androidx.core.widget.NestedScrollView>
-
-            <ProgressBar
-                android:layout_width="match_parent"
+            <!-- Recycler -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/progress_bar"
-                android:visibility="gone"/>
+                tools:listitem="@layout/cardview" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 
+    <!-- FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
@@ -76,8 +73,8 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
-        app:srcCompat="@drawable/ic_baseline_add_30"
-        app:backgroundTint="@color/purple_200" />
+        app:backgroundTint="@color/purple_200"
+        app:srcCompat="@drawable/ic_baseline_add_30" />
 
 
 </RelativeLayout>

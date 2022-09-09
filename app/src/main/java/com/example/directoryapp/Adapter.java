@@ -123,7 +123,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
     public void filtrado(String txtBuscar) {
         int longitud = txtBuscar.length();
         if (longitud == 0) {
-            getUsers(page, limit);
+            getUsers();
         } else {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 List<Datos> coleccion = data.stream().filter(i -> i.getFullname().toLowerCase()
@@ -275,7 +275,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                     }
                 } else {
                     Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show();
-                    getUsers(page, limit);
+                    getUsers();
 
 
                 }
