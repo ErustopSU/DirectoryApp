@@ -1,6 +1,8 @@
 package com.example.directoryapp;
 
 
+import static com.example.directoryapp.MainActivity.limit;
+import static com.example.directoryapp.MainActivity.page;
 import static com.example.directoryapp.PreMainActivity.getUsers;
 
 import android.app.AlertDialog;
@@ -121,7 +123,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
     public void filtrado(String txtBuscar) {
         int longitud = txtBuscar.length();
         if (longitud == 0) {
-            getUsers();
+            getUsers(page, limit);
         } else {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 List<Datos> coleccion = data.stream().filter(i -> i.getFullname().toLowerCase()
@@ -273,7 +275,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                     }
                 } else {
                     Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show();
-                    getUsers();
+                    getUsers(page, limit);
 
 
                 }

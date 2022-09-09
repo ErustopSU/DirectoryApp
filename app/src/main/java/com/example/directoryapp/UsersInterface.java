@@ -13,12 +13,15 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface UsersInterface {
 
      //Obtiene la lista completa de usuarios disponibles en la base de datos
     @GET ("users")
-    Call<List<User>> listaUsers();
+    Call<List<User>> listaUsers(@Query("page") int page,
+                                @Query("limit") int limit);
+
 
     //Obtiene un usuario por id
     @GET ("users/{id}")

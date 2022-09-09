@@ -4,10 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -24,6 +27,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private static Adapter adapter;
+    private NestedScrollView nestedScrollView;
+    public static ProgressBar progressBar;
+    public static int page = 1, limit = 10;
 
 
     public static String _id;
@@ -45,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         swipeRefreshLayout = findViewById(R.id.swipe);
         recyclerView = findViewById(R.id.recyclerview);
         boton1 = findViewById(R.id.floatingActionButton);
+        nestedScrollView = findViewById(R.id.scrollView);
+        progressBar = findViewById(R.id.progress_bar);
+
 
 
         //Load data
@@ -88,6 +97,24 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         txtBuscar.onActionViewExpanded();
         txtBuscar.clearFocus();
         txtBuscar.setQueryHint("Buscar");
+
+        PreMainActivity.getUsers(page, limit);
+
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if(scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
+                    //when reach last item position
+                    //Increase page size
+                    page++;
+                    //show progress bar
+                    progressBar.setVisibility(View.VISIBLE);
+                    //call method
+                    PreMainActivity.getUsers(page, limit);
+                    System.out.println("Se esta ejecutando la paginacion");
+                }
+            }
+        });
     }
 
     @Override
@@ -106,10 +133,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         catitos = PreMainActivity.catitos;*/
     }
 
+
+
+
     private void sincronizeUsers() {
         if (UtilsNetwork.isOnline(this)) {
-            Toast.makeText(getApplicationContext(), "Si hay internet", Toast.LENGTH_SHORT).show();
-
+            //Toast.makeText(getApplicationContext(), "Si hay internet", Toast.LENGTH_SHORT).show();
+            System.out.println("Si hay internet");
             // Retrofit
             for (int i = 0; i < usersRetrofit.size(); i++) {
                 System.out.println("ID ANTES DEL for: " + usersRetrofit.get(i).getId().length());
@@ -152,20 +182,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         adapter = new Adapter(MainActivity.this, new ArrayList<>());
         recyclerView.setAdapter(adapter);
     }
-
-    //Metodo para que al poblar las tarjetas se le asigne una imagen diferente a cada cardview
-    /*public static void catitosCards(List<ImageCats> imageCats){
-        List<ImageCats> imageCatitos = new ArrayList<>();
-
-        for (ImageCats image: imageCats) {
-            imageCatitos.add(new ImageCats(
-                                image.getUrl(),
-
-
-            ));
-
-        }
-    }*/
 
     //Poblamos la data en las tarjetas mediante el adapter
     public static void populateUsers(List<User> usersList, List<ImageCats> imageCats) {
