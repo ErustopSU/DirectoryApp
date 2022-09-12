@@ -1,9 +1,9 @@
-package com.example.directoryapp;
+package com.sitiouno.directoryapp;
 
 
-import static com.example.directoryapp.MainActivity.limit;
-import static com.example.directoryapp.MainActivity.page;
-import static com.example.directoryapp.PreMainActivity.getUsers;
+import static com.sitiouno.directoryapp.MainActivity.limit;
+import static com.sitiouno.directoryapp.MainActivity.page;
+import static com.sitiouno.directoryapp.PreMainActivity.getUsers;
 
 import android.app.AlertDialog;
 import android.content.Context;

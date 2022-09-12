@@ -1,4 +1,4 @@
-package com.example.directoryapp;
+package com.sitiouno.directoryapp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;

@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.example.directoryapp",
+  "applicationId": "com.sitiouno.directoryapp",
   "variantName": "release",
   "elements": [
     {

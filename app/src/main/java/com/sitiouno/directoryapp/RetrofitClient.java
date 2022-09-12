@@ -1,4 +1,4 @@
-package com.example.directoryapp;
+package com.sitiouno.directoryapp;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

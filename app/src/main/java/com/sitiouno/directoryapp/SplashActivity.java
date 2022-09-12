@@ -1,4 +1,4 @@
-package com.example.directoryapp;
+package com.sitiouno.directoryapp;
 
 import android.content.Intent;
 import android.os.Bundle;
