@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             }
 
         });
+
 
         //Se asigna al boton "+" pasar de la primera pantalla a la segunda, (Sería la acción "CREAR")
         boton1.setOnClickListener(new View.OnClickListener() {
