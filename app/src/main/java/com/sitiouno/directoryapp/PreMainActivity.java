@@ -45,22 +45,6 @@ public class PreMainActivity extends AppCompatActivity {
             }
         });
 
-        //Forzar a la app a que falle
-        Button crashButton = new Button(this);
-        crashButton.setText("Test Crash");
-        crashButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                throw new RuntimeException("Test Crash"); // Force a crash
-            }
-        });
-
-        addContentView(crashButton, new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
-
-        //forzar que crashee la app
-
-
         //Load data
         getUsersSQLite();
         getUsers();

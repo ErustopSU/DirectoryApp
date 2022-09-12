@@ -1,43 +1,34 @@
 {
   "project_info": {
-    "project_number": "29989098666",
-    "firebase_url": "https://techmindsacademy-5f7f4-default-rtdb.firebaseio.com",
-    "project_id": "techmindsacademy-5f7f4",
-    "storage_bucket": "techmindsacademy-5f7f4.appspot.com"
+    "project_number": "25542814203",
+    "project_id": "directoryapp-b284d",
+    "storage_bucket": "directoryapp-b284d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:29989098666:android:be7eaf3f2bf769312e2cd3",
+        "mobilesdk_app_id": "1:25542814203:android:aaa316e8af5cff00ad435e",
         "android_client_info": {
-          "package_name": "com.sitiouno.cloudjukebox"
+          "package_name": "com.example.directoryapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "29989098666-g8n038smqvte2kd20918sp9s165eorrq.apps.googleusercontent.com",
+          "client_id": "25542814203-2f6s1huo2339heanritbq1blo2afivls.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBcpktSmXFr1K1_wxKtO_67d-wMkEKbcXc"
+          "current_key": "AIzaSyCLxy-XfE3_p0Q3fFRjvaSElcS0CgN6CfA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "29989098666-g8n038smqvte2kd20918sp9s165eorrq.apps.googleusercontent.com",
+              "client_id": "25542814203-2f6s1huo2339heanritbq1blo2afivls.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "29989098666-0lvvbjfls1de5d84gkcaeo62dn7jtgum.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.sitiouno.foodish",
-                "app_store_id": "1615778793"
-              }
             }
           ]
         }
@@ -45,171 +36,28 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:29989098666:android:b498df439224dc382e2cd3",
+        "mobilesdk_app_id": "1:25542814203:android:5b474c387ae35549ad435e",
         "android_client_info": {
           "package_name": "com.sitiouno.directoryapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "29989098666-g8n038smqvte2kd20918sp9s165eorrq.apps.googleusercontent.com",
+          "client_id": "25542814203-2f6s1huo2339heanritbq1blo2afivls.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBcpktSmXFr1K1_wxKtO_67d-wMkEKbcXc"
+          "current_key": "AIzaSyCLxy-XfE3_p0Q3fFRjvaSElcS0CgN6CfA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "29989098666-g8n038smqvte2kd20918sp9s165eorrq.apps.googleusercontent.com",
+              "client_id": "25542814203-2f6s1huo2339heanritbq1blo2afivls.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "29989098666-0lvvbjfls1de5d84gkcaeo62dn7jtgum.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.sitiouno.foodish",
-                "app_store_id": "1615778793"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:29989098666:android:1b5abf9a2a3954be2e2cd3",
-        "android_client_info": {
-          "package_name": "com.sitiouno.mytestament"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "29989098666-g8n038smqvte2kd20918sp9s165eorrq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBcpktSmXFr1K1_wxKtO_67d-wMkEKbcXc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "29989098666-g8n038smqvte2kd20918sp9s165eorrq.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "29989098666-0lvvbjfls1de5d84gkcaeo62dn7jtgum.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.sitiouno.foodish",
-                "app_store_id": "1615778793"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:29989098666:android:e293b6e299d43d892e2cd3",
-        "android_client_info": {
-          "package_name": "com.sitiouno.valetparking"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "29989098666-1hlc709mg4nrjkgh3e1c9d5t7qooc20c.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.sitiouno.valetparking",
-            "certificate_hash": "80a6f25ec75c384ace762400461ec1e045102f95"
-          }
-        },
-        {
-          "client_id": "29989098666-fgio1elqhmg79lr191gur28915iqassi.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.sitiouno.valetparking",
-            "certificate_hash": "691952f9ea09695d711d3726190f8857da5a2fb9"
-          }
-        },
-        {
-          "client_id": "29989098666-vuuhrptacmd573tk5qe24b0n9qgm1eu2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.sitiouno.valetparking",
-            "certificate_hash": "3fb2aaef23b53c4259b7549e372726846e4e460a"
-          }
-        },
-        {
-          "client_id": "29989098666-g8n038smqvte2kd20918sp9s165eorrq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBcpktSmXFr1K1_wxKtO_67d-wMkEKbcXc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "29989098666-g8n038smqvte2kd20918sp9s165eorrq.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "29989098666-0lvvbjfls1de5d84gkcaeo62dn7jtgum.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.sitiouno.foodish",
-                "app_store_id": "1615778793"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:29989098666:android:738d1a78b9ec03292e2cd3",
-        "android_client_info": {
-          "package_name": "com.visionapp"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "29989098666-g8n038smqvte2kd20918sp9s165eorrq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBcpktSmXFr1K1_wxKtO_67d-wMkEKbcXc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "29989098666-g8n038smqvte2kd20918sp9s165eorrq.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "29989098666-0lvvbjfls1de5d84gkcaeo62dn7jtgum.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.sitiouno.foodish",
-                "app_store_id": "1615778793"
-              }
             }
           ]
         }
