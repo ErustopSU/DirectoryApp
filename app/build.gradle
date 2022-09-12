@@ -1,13 +1,18 @@
-plugins {
-    id 'com.android.application'
-}
+
+    apply plugin: 'com.android.application'
+    apply plugin: 'com.google.gms.google-services'
+    apply plugin: 'com.google.firebase.crashlytics'
+    //apply plugin: 'com.google.firebase.firebase-perf'
+    apply plugin: 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+
+
 
 android {
     compileSdk 32
 
     defaultConfig {
         applicationId "com.sitiouno.directoryapp"
-        minSdk 17
+        minSdk 19
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -20,15 +25,18 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+
     }
 }
 
 dependencies {
+
 
     implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'com.google.android.material:material:1.6.1'
@@ -48,4 +56,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10'
     implementation 'androidx.multidex:multidex:2.0.0'
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation platform('com.google.firebase:firebase-bom:30.4.1')
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.gms:google-services:4.3.13'
 }
