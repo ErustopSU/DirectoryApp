@@ -1,4 +1,4 @@
-package com.sitiouno.directoryapp;
+package com.sitiouno.directoryapp.Database;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

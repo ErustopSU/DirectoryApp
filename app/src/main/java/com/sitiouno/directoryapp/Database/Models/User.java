@@ -1,4 +1,4 @@
-package com.sitiouno.directoryapp;
+package com.sitiouno.directoryapp.Database.Models;
 
 import android.widget.ImageView;
 

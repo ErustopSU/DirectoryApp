@@ -1,4 +1,4 @@
-package com.sitiouno.directoryapp;
+package com.sitiouno.directoryapp.Database;
 
 import android.content.ContentValues;
 import android.content.Context;

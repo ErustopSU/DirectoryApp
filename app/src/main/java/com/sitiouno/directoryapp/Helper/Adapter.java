@@ -1,8 +1,6 @@
-package com.sitiouno.directoryapp;
+package com.sitiouno.directoryapp.Helper;
 
 
-import static com.sitiouno.directoryapp.MainActivity.limit;
-import static com.sitiouno.directoryapp.MainActivity.page;
 import static com.sitiouno.directoryapp.PreMainActivity.getUsers;
 
 import android.app.AlertDialog;
@@ -25,6 +23,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.sitiouno.directoryapp.Database.AdminSQLiteOpenHelper;
+import com.sitiouno.directoryapp.Database.RetrofitClient;
+import com.sitiouno.directoryapp.MainActivity2;
+import com.sitiouno.directoryapp.R;
+import com.sitiouno.directoryapp.Database.Models.User;
+import com.sitiouno.directoryapp.Database.Interfaces.UsersInterface;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
