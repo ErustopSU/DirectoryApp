@@ -1,7 +1,9 @@
 package com.sitiouno.directoryapp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -15,6 +17,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sitiouno.directoryapp.Database.AdminSQLiteOpenHelper;
+import com.sitiouno.directoryapp.Database.Interfaces.UsersInterface;
+import com.sitiouno.directoryapp.Database.RetrofitClient;
 import com.sitiouno.directoryapp.Helper.Datos;
 import com.sitiouno.directoryapp.Helper.Adapter;
 import com.sitiouno.directoryapp.Helper.UtilsNetwork;
@@ -24,79 +28,89 @@ import com.sitiouno.directoryapp.Database.Models.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    private SearchView txtBuscar;
-    private FloatingActionButton boton1;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView recyclerView;
-    private static Adapter adapter;
+    //Data
+    private static List<User> usersSQLite = new ArrayList<>();
+    private static List<User> usersRetrofit = new ArrayList();
+    public static List<ImageCats> catitos = new ArrayList<>();
+    public static int usersSize = 0;
+
+    //Context
+    private static Context context;
+
+    //Search
+    private static SearchView txtBuscar;
+
+    //
+    private static FloatingActionButton floatingActionButton;
+    private static SwipeRefreshLayout swipeRefreshLayout;
     public static ProgressBar progressBar;
 
-    public static String _id;
-    private String fullname;
-    private String email;
-    private String code;
-
-    //Data
-    private List<User> usersSQLite = new ArrayList<>();
-    private List<User> usersRetrofit = new ArrayList();
-    private List<ImageCats> catitos = new ArrayList<>();
+    //Recycler view and adapter
+    private static RecyclerView recyclerView;
+    private static Adapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        context = this;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Conexion de la parte logica con la grafica
         txtBuscar = findViewById(R.id.txtBuscar);
         swipeRefreshLayout = findViewById(R.id.swipe);
         recyclerView = findViewById(R.id.recyclerview);
-        boton1 = findViewById(R.id.floatingActionButton);
+        floatingActionButton = findViewById(R.id.floatingActionButton);
         progressBar = findViewById(R.id.progress_bar);
 
+        //Clear focus in search
+        txtBuscar.clearFocus();
 
-        //Load data
-        usersSQLite = PreMainActivity.usersSQLite;
-        usersRetrofit = PreMainActivity.usersRetrofit;
-        catitos = PreMainActivity.catitos;
+        //Enable progress bar and disable input and FAB
+        txtBuscar.setEnabled(false);
+        floatingActionButton.setEnabled(false);
+        progressBar.setVisibility(View.VISIBLE);
 
+        //Set recycler view
         setRecyclerView();
-        sincronizeUsers();
+        getUsers();
 
         //Se Asigna una función de <actualizar> a la pantalla principal haciendo swipedown(deslizar hacia abajo)
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false);
-                sincronizeUsers();
 
-                PreMainActivity.getUsers();
-                PreMainActivity.getUsersSQLite();
-                PreMainActivity.getCatitos();
+                //Enable progress bar and disable input and FAB
+                txtBuscar.setEnabled(false);
+                floatingActionButton.setEnabled(false);
+                progressBar.setVisibility(View.VISIBLE);
 
-                //Load data
-                usersSQLite = PreMainActivity.usersSQLite;
-                usersRetrofit = PreMainActivity.usersRetrofit;
-                catitos = PreMainActivity.catitos;
-
+                getUsers();
             }
-
         });
 
-
         //Se asigna al boton "+" pasar de la primera pantalla a la segunda, (Sería la acción "CREAR")
-        boton1.setOnClickListener(new View.OnClickListener() {
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (UtilsNetwork.isOnline(MainActivity.this)) {
+                    txtBuscar.setQuery(null, false);
+                    txtBuscar.clearFocus();
+
                     Intent intent = new Intent(MainActivity.this, MainActivity2.class);
-
                     intent.putExtra("method", "CREATE");
-
                     startActivity(intent);
 
                 } else {
-
                     Toast.makeText(MainActivity.this, "Necesitas internet para crear una tarjeta.", Toast.LENGTH_LONG).show();
                 }
 
@@ -114,57 +128,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public void onResume() {
         super.onResume();
 
-        sincronizeUsers();
+        //Enable progress bar and disable input and FAB
+        txtBuscar.setEnabled(false);
+        txtBuscar.clearFocus();
+        floatingActionButton.setEnabled(false);
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
 
-        PreMainActivity.getUsers();
-        PreMainActivity.getCatitos();
-        PreMainActivity.getUsersSQLite();
-        
-        //Load data
-        usersRetrofit = PreMainActivity.usersRetrofit;
-        usersSQLite = PreMainActivity.usersSQLite;
-        catitos = PreMainActivity.catitos;
-
-
-
-    }
-
-    private void sincronizeUsers() {
-        if (UtilsNetwork.isOnline(this)) {
-            //Toast.makeText(getApplicationContext(), "Si hay internet", Toast.LENGTH_SHORT).show();
-            System.out.println("Si hay internet");
-            // Retrofit
-            for (int i = 0; i < usersRetrofit.size(); i++) {
-                System.out.println("ID ANTES DEL for: " + usersRetrofit.get(i).getId().length());
-
-                // SQLite
-                for (int j = 0; j < usersSQLite.size(); j++) {
-
-                    String retrofitId = usersRetrofit.get(i).getId();
-                    String retrofitFullname = usersRetrofit.get(i).getFullname();
-                    String retrofitEmail = usersRetrofit.get(i).getEmail();
-                    String retrofitCode = String.valueOf(usersRetrofit.get(i).getCode());
-
-                    String SqlId = usersSQLite.get(j).getId();
-
-                    if (usersSQLite.contains(retrofitId)) {
-                        System.out.println("User found");
-                    } else {
-                        System.out.println("User not found");
-
-                        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(this);
-
-                        adminSQLiteOpenHelper.registerUser(_id, fullname, email, code);
-                        //TODO: Method create user in SQLite -> Retrofit
-                    }
-                }
-
-                populateUsers(usersRetrofit, catitos);
-            }
-
-        } else {
-            Toast.makeText(getApplicationContext(), "Cargando datos sin internet", Toast.LENGTH_LONG).show();
-        }
+        getUsers();
     }
 
     //Configurar RecyclerView
@@ -174,6 +145,126 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         adapter = new Adapter(MainActivity.this, new ArrayList<>());
         recyclerView.setAdapter(adapter);
+    }
+
+    //metodo getUsers con SQLite
+    public static void getUsersSQLite() {
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+
+        Cursor cursor = adminSQLiteOpenHelper.consultUser();
+
+        User user;
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+
+                do {
+                    user = new User();
+
+                    user.setId(String.valueOf(cursor.getInt(0)));
+                    user.setFullname(cursor.getString(1));
+                    user.setEmail(cursor.getString(2));
+                    user.setCode(Integer.parseInt(cursor.getString(3)));
+
+                    boolean isUserExist = false;
+
+                    for (int i = 0; i < usersSQLite.size(); i++) {
+                        if (usersSQLite.get(i).getId().equals(user.getId())) isUserExist = true;
+                    }
+
+                    if (!isUserExist) usersSQLite.add(user);
+
+
+                } while (cursor.moveToNext());
+            }
+
+            System.out.println("Users SQLite size: " + usersSQLite.size());
+            //populateUsers(usersSQLite);
+            cursor.close();
+        } else {
+            System.out.println("Users SQLite size: 0");
+        }
+    }
+
+    //metodo getUsers con Retrofit
+    public static void getUsers() {
+        //Crear conexion al API
+        Retrofit retrofit = RetrofitClient.getRetrofitClient();
+
+        //Creando la llamada al endpoint del api correspondiente
+        Call<List<User>> call = retrofit.create(UsersInterface.class).listaUsers();
+
+        //Ejecutamos la llamada
+        call.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+
+                //Si la respuesta NO es satisfactoria
+                if (!response.isSuccessful()) {
+
+                    //Obtener el codigo de respuesta de la peticion para poder controlar las validaciones
+                    switch (response.code()) {
+                        case 500:
+                            System.out.println("500");
+                            break;
+                        case 404:
+                            System.out.println("404");
+                            break;
+                        default:
+                            System.out.println("Error: " + response.code());
+                    }
+
+                    //Si la respuesta es satisfactoria
+                } else {
+                    usersRetrofit = response.body();
+                    usersSize = usersRetrofit.size();
+                    System.out.println("Users retrofit size: " + usersRetrofit.size());
+
+                    getCatitos();
+                }
+            }
+
+            //En el caso de que la peticion falle
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                System.out.println("Error: " + t.getMessage());
+                Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //Method get list cats
+    public static void getCatitos() {
+        Retrofit retrofit = RetrofitClient.getRetrofitClient2();
+
+        Call<List<ImageCats>> call = retrofit.create(UsersInterface.class).getImageCats(String.valueOf(usersRetrofit.size()), "live_OpXv3IKTw1SebnMhH1y3XdOay0AVAc2wIxzi7TrMZOUuB43kIvnLSKh2xJPoMYoa ");
+
+        call.enqueue(new Callback<List<ImageCats>>() {
+            @Override
+            public void onResponse(Call<List<ImageCats>> call, Response<List<ImageCats>> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(context, (CharSequence) response.errorBody(), Toast.LENGTH_SHORT).show();
+                } else {
+                    catitos = response.body();
+
+                    System.out.println("Size cats: " + catitos.size());
+
+                    txtBuscar.setEnabled(true);
+                    floatingActionButton.setEnabled(true);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+
+
+                    populateUsers(usersRetrofit, catitos);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ImageCats>> call, Throwable t) {
+                System.out.println("Error: " + t.getMessage());
+                Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     //Poblamos la data en las tarjetas mediante el adapter
@@ -199,6 +290,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     }
 
+    //Search data in cards
     @Override
     public boolean onQueryTextSubmit(String s) {
         return false;

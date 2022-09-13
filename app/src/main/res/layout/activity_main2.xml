@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
-            android:hint="Ingresa tu nombre"
+            android:hint="Nombre"
             app:helperTextTextColor="@color/rojo"
             app:startIconDrawable="@drawable/ic_person">
 
@@ -68,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:hint="Ingresa tu correo"
+            android:hint="Correo"
             app:endIconMode="clear_text"
             app:helperTextTextColor="@color/rojo"
             app:startIconDrawable="@drawable/ic_email">
@@ -87,13 +87,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
-            android:hint="Ingresa tu código"
-            app:counterEnabled="true"
-            app:counterMaxLength="5"
+            android:hint="Code"
             app:endIconMode="clear_text"
             app:helperTextTextColor="@color/rojo"
             app:startIconDrawable="@drawable/ic_code">
-
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/code"

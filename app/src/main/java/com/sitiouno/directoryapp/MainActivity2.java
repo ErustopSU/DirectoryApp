@@ -40,7 +40,6 @@ public class MainActivity2 extends AppCompatActivity {
     private Button boton1, boton2;
     private ImageView vistaimagen;
 
-
     private String id, fullname, email, code, method;
     private int position;
 
@@ -66,7 +65,7 @@ public class MainActivity2 extends AppCompatActivity {
         email = getIntent().getStringExtra("email");
         code = getIntent().getStringExtra("code");
         method = getIntent().getStringExtra("method");
-        position  = getIntent().getIntExtra("position", 0);
+        position = getIntent().getIntExtra("position", 0);
 
         //Set data
         et1.getEditText().setText(fullname);
@@ -80,31 +79,19 @@ public class MainActivity2 extends AppCompatActivity {
         switch (method) {
             case "OBTENER":
                 boton1.setVisibility(View.GONE);
+
                 tv1.setText("VISTA DE LA TARJETA");
 
                 vistaimagen.findViewById(R.id.imageUserGallery2);
 
                 boton2.setText("REGRESAR");
 
-                TextInputLayout til1 = (TextInputLayout) findViewById(R.id.cajaet1);
-                til1.setHelperTextEnabled(false);
-                til1.setHint("Nombre");
-
-                TextInputLayout til2 = findViewById(R.id.cajaet2);
-                til2.setHelperTextEnabled(false);
-                til2.setHint("Correo");
-
-                TextInputLayout til3 = findViewById(R.id.cajaet3);
-                til3.setHelperTextEnabled(false);
-                til3.setHint("Codigo");
-                til3.setCounterEnabled(false);
-
                 et1.setEnabled(false);
                 et2.setEnabled(false);
                 et3.setEnabled(false);
 
                 vistaimagen.setVisibility(View.VISIBLE);
-                vistaimagen.setImageBitmap(getImageBitmap(PreMainActivity.catitos.get(position).getUrl()));
+                vistaimagen.setImageBitmap(getImageBitmap(MainActivity.catitos.get(position).getUrl()));
 
                 break;
             case "ACTUALIZAR":
@@ -123,9 +110,11 @@ public class MainActivity2 extends AppCompatActivity {
                                 "\\.,;:\\s@\"]{2,63}";
                         final String solotexto = "[a-zA-Z ]+";
 
-                        if (et1.getEditText().getText().toString().isEmpty() ||
+                        if (
+                                et1.getEditText().getText().toString().isEmpty() ||
                                 et2.getEditText().getText().toString().isEmpty() ||
-                                et3.getEditText().getText().toString().isEmpty()) {
+                                et3.getEditText().getText().toString().isEmpty())
+                        {
                             Toast.makeText(MainActivity2.this, "Debes llenar todos los campos", Toast.LENGTH_SHORT).show();
                         } else if
                         ((!compruebaname.matches(solotexto))) {
@@ -143,10 +132,7 @@ public class MainActivity2 extends AppCompatActivity {
                             int code = Integer.parseInt(et3.getEditText().getText().toString());
 
                             updateUser(fullname, email, code, id);
-
-
                         } else {
-
                             Toast.makeText(MainActivity2.this, "Necesitas internet para editar una tarjeta.", Toast.LENGTH_LONG).show();
                         }
 
@@ -232,7 +218,6 @@ public class MainActivity2 extends AppCompatActivity {
         user.setEmail(et2.getEditText().getText().toString());
         user.setCode(Integer.parseInt(et3.getEditText().getText().toString()));
 
-
         return user;
 
     }
@@ -280,7 +265,6 @@ public class MainActivity2 extends AppCompatActivity {
                             Toast.makeText(MainActivity2.this, "Error" + ": " + response.code(), Toast.LENGTH_SHORT).show();
                             break;
                     }
-                    return;
                 } else {
 
                     User user1 = response.body();
@@ -370,9 +354,6 @@ public class MainActivity2 extends AppCompatActivity {
                     adminSQLiteOpenHelper.updateUser(_id, fullname, email, code);
 
                     Toast.makeText(MainActivity2.this, "Usuario actualizado", Toast.LENGTH_SHORT).show();
-
-
-
 
                     finish();
                 }

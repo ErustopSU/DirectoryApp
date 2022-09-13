@@ -1,4 +1,4 @@
-package com.sitiouno.directoryapp.Database.Interfaces;
+package com.sitiouno.directoryapp;
 
 import android.content.Intent;
 import android.os.Bundle;

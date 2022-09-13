@@ -1,9 +1,6 @@
 package com.sitiouno.directoryapp.Helper;
 
 
-import static com.sitiouno.directoryapp.PreMainActivity.getCatitos;
-import static com.sitiouno.directoryapp.PreMainActivity.getUsers;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,7 +25,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sitiouno.directoryapp.Database.AdminSQLiteOpenHelper;
 import com.sitiouno.directoryapp.Database.Models.ImageCats;
 import com.sitiouno.directoryapp.Database.RetrofitClient;
+import com.sitiouno.directoryapp.MainActivity;
 import com.sitiouno.directoryapp.MainActivity2;
+import com.sitiouno.directoryapp.PreMainActivity;
 import com.sitiouno.directoryapp.R;
 import com.sitiouno.directoryapp.Database.Models.User;
 import com.sitiouno.directoryapp.Database.Interfaces.UsersInterface;
@@ -128,9 +127,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void filtrado(String txtBuscar) {
-        int longitud = txtBuscar.length();
-        if (longitud == 0) {
-            getUsers();
+
+        if (txtBuscar.isEmpty()) {
+            MainActivity.getUsers();
         } else {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 List<Datos> coleccion = data.stream().filter(i -> i.getFullname().toLowerCase()
@@ -246,16 +245,17 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
+                System.out.println("Error: " + t.getMessage());
+                Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     //Delete user by id
     private void deleteUser(String id) {
-
         //Creamos conexion con Retrofit
         Retrofit retrofit = RetrofitClient.getRetrofitClient();
+
         //Hacemos la llamada al endpoint mediante la interfaz
         Call<User> deleteUser = retrofit.create(UsersInterface.class).deleteUser(id);
 
@@ -267,13 +267,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
             public void onResponse(Call<User> call, Response<User> response) {
 
                 if (!response.isSuccessful()) {
-
                     switch (response.code()) {
-
                         case 500:
                             Toast.makeText(context, "500", Toast.LENGTH_SHORT).show();
                             break;
-
                         case 404:
                             Toast.makeText(context, "404", Toast.LENGTH_SHORT).show();
                             break;
@@ -282,61 +279,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                     }
                 } else {
                     Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show();
-                    getUsers();
-
-
+                    MainActivity.getUsers();
                 }
 
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void deleteImageCats(String id) {
-
-
-
-        //Creamos conexion con Retrofit
-        Retrofit retrofit2 = RetrofitClient.getRetrofitClient2();
-        //Hacemos la llamada al endpoint mediante la interfaz
-        Call<List<ImageCats>> deleteImageCats = retrofit2.create(UsersInterface.class).deleteImagesCats(id);
-
-        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
-        adminSQLiteOpenHelper.deleteData(id);
-
-        deleteImageCats.enqueue(new Callback<List<ImageCats>>() {
-            @Override
-            public void onResponse(Call<List<ImageCats>> call, Response<List<ImageCats>> response) {
-                if (!response.isSuccessful()) {
-
-                    switch (response.code()) {
-
-                        case 500:
-                            Toast.makeText(context, "500", Toast.LENGTH_SHORT).show();
-                            break;
-
-                        case 404:
-                            Toast.makeText(context, "404", Toast.LENGTH_SHORT).show();
-                            break;
-                        default:
-                            Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show();
-                    getCatitos();
-                    System.out.println("Esta funcionando el metodo para eliminar la imagen tambien");
-
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<ImageCats>> call, Throwable t) {
-
+                System.out.println("Error: " + t.getMessage());
+                Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -355,8 +306,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     deleteUser(id);
-                    deleteImageCats(id);
-
                 }
             });
 

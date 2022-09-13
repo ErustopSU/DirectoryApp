@@ -41,8 +41,9 @@ public interface UsersInterface {
     @DELETE("users/delete/{id}")
     Call<User> deleteUser(@Path("id") String id);
 
-    @GET("search?limit=12&breed_ids=beng&api_key=live_OpXv3IKTw1SebnMhH1y3XdOay0AVAc2wIxzi7TrMZOUuB43kIvnLSKh2xJPoMYoa")
-    Call<List<ImageCats>> getImageCats();
+    //@GET("search?limit=12&breed_ids=beng&api_key=live_OpXv3IKTw1SebnMhH1y3XdOay0AVAc2wIxzi7TrMZOUuB43kIvnLSKh2xJPoMYoa")
+    @GET("search?")
+    Call<List<ImageCats>> getImageCats(@Query("limit") String limit, @Query("api_key") String apiKey);
     //<List<ImageCats>> getImageCats(@Query("limit") int limite);
 
     @DELETE("[{id}]")
