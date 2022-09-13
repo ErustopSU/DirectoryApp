@@ -1,10 +1,12 @@
-package com.sitiouno.directoryapp;
+package com.sitiouno.directoryapp.Database.Interfaces;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.sitiouno.directoryapp.MainActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

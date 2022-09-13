@@ -1,7 +1,8 @@
-package com.sitiouno.directoryapp;
+package com.sitiouno.directoryapp.Database.Interfaces;
 
 
-import android.widget.ImageView;
+import com.sitiouno.directoryapp.Database.Models.ImageCats;
+import com.sitiouno.directoryapp.Database.Models.User;
 
 import java.util.List;
 
@@ -14,7 +15,6 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 public interface UsersInterface {
 
@@ -42,5 +42,10 @@ public interface UsersInterface {
 
     @GET("search?limit=12&breed_ids=beng&api_key=live_OpXv3IKTw1SebnMhH1y3XdOay0AVAc2wIxzi7TrMZOUuB43kIvnLSKh2xJPoMYoa")
     Call<List<ImageCats>> getImageCats();
+
+
+    
+
+
 
 }
