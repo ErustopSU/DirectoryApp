@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private List<User> usersRetrofit = new ArrayList();
     private List<ImageCats> catitos = new ArrayList<>();
 
-    //Pagination
-    public static int page = 1, limit = 10;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +69,16 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(false);
                 sincronizeUsers();
+
+                PreMainActivity.getUsers();
+                PreMainActivity.getUsersSQLite();
+                PreMainActivity.getCatitos();
+
+                //Load data
+                usersSQLite = PreMainActivity.usersSQLite;
+                usersRetrofit = PreMainActivity.usersRetrofit;
+                catitos = PreMainActivity.catitos;
+
             }
 
         });
@@ -100,29 +108,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         txtBuscar.clearFocus();
         txtBuscar.setQueryHint("Buscar");
 
-        //PreMainActivity.getUsers(page, limit);
-
-        /*
-        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if(scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()){
-                    //when reach last item position
-
-                    //Increase page size
-                    page++;
-
-                    //show progress bar
-                    progressBar.setVisibility(View.VISIBLE);
-
-                    //call method
-                    PreMainActivity.getUsers(page, limit);
-
-                    System.out.println("Se esta ejecutando la paginacion");
-                }
-            }
-        });
-        */
     }
 
     @Override
@@ -131,14 +116,17 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         sincronizeUsers();
 
-        /* PreMainActivity.getUsers();
-        PreMainActivity.getUsersSqlite();
+        PreMainActivity.getUsers();
         PreMainActivity.getCatitos();
-
+        PreMainActivity.getUsersSQLite();
+        
         //Load data
-        usersSQLite = PreMainActivity.usersSQLite;
         usersRetrofit = PreMainActivity.usersRetrofit;
-        catitos = PreMainActivity.catitos;*/
+        usersSQLite = PreMainActivity.usersSQLite;
+        catitos = PreMainActivity.catitos;
+
+
+
     }
 
     private void sincronizeUsers() {
