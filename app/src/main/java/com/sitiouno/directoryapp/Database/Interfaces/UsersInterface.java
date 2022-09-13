@@ -15,6 +15,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface UsersInterface {
 
@@ -42,9 +43,15 @@ public interface UsersInterface {
 
     @GET("search?limit=12&breed_ids=beng&api_key=live_OpXv3IKTw1SebnMhH1y3XdOay0AVAc2wIxzi7TrMZOUuB43kIvnLSKh2xJPoMYoa")
     Call<List<ImageCats>> getImageCats();
+    //<List<ImageCats>> getImageCats(@Query("limit") int limite);
+
+    @DELETE("[{id}]")
+    Call<List<ImageCats>> deleteImagesCats(@Path("id") String id);
 
 
-    
+
+
+
 
 
 

@@ -1,6 +1,7 @@
 package com.sitiouno.directoryapp.Helper;
 
 
+import static com.sitiouno.directoryapp.PreMainActivity.getCatitos;
 import static com.sitiouno.directoryapp.PreMainActivity.getUsers;
 
 import android.app.AlertDialog;
@@ -25,6 +26,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sitiouno.directoryapp.Database.AdminSQLiteOpenHelper;
+import com.sitiouno.directoryapp.Database.Models.ImageCats;
 import com.sitiouno.directoryapp.Database.RetrofitClient;
 import com.sitiouno.directoryapp.MainActivity2;
 import com.sitiouno.directoryapp.R;
@@ -294,6 +296,51 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
         });
     }
 
+    private void deleteImageCats(String id) {
+
+
+
+        //Creamos conexion con Retrofit
+        Retrofit retrofit2 = RetrofitClient.getRetrofitClient2();
+        //Hacemos la llamada al endpoint mediante la interfaz
+        Call<List<ImageCats>> deleteImageCats = retrofit2.create(UsersInterface.class).deleteImagesCats(id);
+
+        AdminSQLiteOpenHelper adminSQLiteOpenHelper = new AdminSQLiteOpenHelper(context);
+        adminSQLiteOpenHelper.deleteData(id);
+
+        deleteImageCats.enqueue(new Callback<List<ImageCats>>() {
+            @Override
+            public void onResponse(Call<List<ImageCats>> call, Response<List<ImageCats>> response) {
+                if (!response.isSuccessful()) {
+
+                    switch (response.code()) {
+
+                        case 500:
+                            Toast.makeText(context, "500", Toast.LENGTH_SHORT).show();
+                            break;
+
+                        case 404:
+                            Toast.makeText(context, "404", Toast.LENGTH_SHORT).show();
+                            break;
+                        default:
+                            Toast.makeText(context, "Error!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(context, "Usuario eliminado", Toast.LENGTH_SHORT).show();
+                    getCatitos();
+                    System.out.println("Esta funcionando el metodo para eliminar la imagen tambien");
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ImageCats>> call, Throwable t) {
+
+            }
+        });
+    }
+
     //Ventana emergenete para eliminar un usuario
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public AlertDialog deleteDialog(String id) {
@@ -308,6 +355,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolderAdapter> {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     deleteUser(id);
+                    deleteImageCats(id);
 
                 }
             });
