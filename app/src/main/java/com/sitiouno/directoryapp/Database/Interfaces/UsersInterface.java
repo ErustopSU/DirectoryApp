@@ -32,7 +32,7 @@ public interface UsersInterface {
     @POST("users/create")
     Call<User> createUser(@Body User user);
 
-    //Actualiza datos de un usuario en especifico, puede ser dato por dato o actualizar todo
+    //Actualiza datos de un usuario en especifico, puede ser dato por dato o actualizar all
     @FormUrlEncoded
     @PUT("users/update/{id}")
     Call<User> updateUser(@Path("id") String id, @Field("fullname") String fullname, @Field("email") String email, @Field("code") int code);
@@ -45,9 +45,6 @@ public interface UsersInterface {
     @GET("search?")
     Call<List<ImageCats>> getImageCats(@Query("limit") String limit, @Query("api_key") String apiKey);
     //<List<ImageCats>> getImageCats(@Query("limit") int limite);
-
-    @DELETE("[{id}]")
-    Call<List<ImageCats>> deleteImagesCats(@Path("id") String id);
 
 
 

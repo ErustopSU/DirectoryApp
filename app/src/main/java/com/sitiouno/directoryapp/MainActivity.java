@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private static List<User> usersSQLite = new ArrayList<>();
     private static List<User> usersRetrofit = new ArrayList();
     public static List<ImageCats> catitos = new ArrayList<>();
-    public static int usersSize = 0;
 
     //Context
     private static Context context;
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     //
     private static FloatingActionButton floatingActionButton;
     private static SwipeRefreshLayout swipeRefreshLayout;
-    public static ProgressBar progressBar;
+    private static ProgressBar progressBar;
 
     //Recycler view and adapter
     private static RecyclerView recyclerView;
@@ -217,7 +216,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     //Si la respuesta es satisfactoria
                 } else {
                     usersRetrofit = response.body();
-                    usersSize = usersRetrofit.size();
                     System.out.println("Users retrofit size: " + usersRetrofit.size());
 
                     getCatitos();
