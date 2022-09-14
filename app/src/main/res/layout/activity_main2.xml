@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
-            android:hint="Nombre"
+            android:hint="Ingresa un nombre"
             app:helperTextTextColor="@color/rojo"
             app:startIconDrawable="@drawable/ic_person">
 
@@ -68,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:hint="Correo"
+            android:hint="Ingresa un correo"
             app:endIconMode="clear_text"
             app:helperTextTextColor="@color/rojo"
             app:startIconDrawable="@drawable/ic_email">
@@ -87,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
-            android:hint="Code"
+            android:hint="Ingresa un código"
             app:endIconMode="clear_text"
             app:helperTextTextColor="@color/rojo"
             app:startIconDrawable="@drawable/ic_code">

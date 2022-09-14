@@ -90,6 +90,10 @@ public class MainActivity2 extends AppCompatActivity {
                 et2.setEnabled(false);
                 et3.setEnabled(false);
 
+                et1.setHint("Nombre");
+                et2.setHint("Correo");
+                et3.setHint("Código");
+
                 vistaimagen.setVisibility(View.VISIBLE);
                 vistaimagen.setImageBitmap(getImageBitmap(MainActivity.catitos.get(position).getUrl()));
 
