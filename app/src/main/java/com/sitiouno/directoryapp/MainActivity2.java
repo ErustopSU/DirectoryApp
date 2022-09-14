@@ -338,8 +338,6 @@ public class MainActivity2 extends AppCompatActivity {
                             Toast.makeText(MainActivity2.this, "Error" + ": " + response.code(), Toast.LENGTH_SHORT).show();
                             break;
                     }
-                    return;
-
                 } else {
 
                     User user1 = response.body();
