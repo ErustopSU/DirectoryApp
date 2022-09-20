@@ -8,7 +8,7 @@ Esto es un Proyecto de un CRUD basado en Android con Java.
 
 Este proyecto está basado en el curso Android desde cero de la Geekipedia de Ernesto en Youtube y la ayuda de el desarrollador Joel Guerrero. 
 
-
+Los Desarrolladores encargados de este proyecto son: Angelin Perez y Enyer Rangel
 
 
 # Uso
