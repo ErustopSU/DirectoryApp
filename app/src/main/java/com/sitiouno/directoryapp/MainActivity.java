@@ -4,7 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -104,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 if (UtilsNetwork.isOnline(MainActivity.this)) {
                     txtBuscar.setQuery(null, false);
                     txtBuscar.clearFocus();
-
                     Intent intent = new Intent(MainActivity.this, MainActivity2.class);
                     intent.putExtra("method", "CREATE");
                     startActivity(intent);
@@ -136,6 +138,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         getUsers();
     }
+
+
 
     //Configurar RecyclerView
     private void setRecyclerView() {
@@ -218,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     usersRetrofit = response.body();
                     System.out.println("Users retrofit size: " + usersRetrofit.size());
 
-                    getCatitos();
+//                    getCatitos();
                 }
             }
 
@@ -300,7 +304,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         adapter.filtrado(s);
         return false;
     }
-
 
 }
 
